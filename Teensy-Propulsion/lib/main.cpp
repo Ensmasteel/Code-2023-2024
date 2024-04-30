@@ -5,7 +5,6 @@
 #include "Ghost.h"
 #include "Motor.h"
 #include "ActionManager.h"
-
 #include "Communication.h"
 #include "Message.h"
 #include "pinSetup.h"
