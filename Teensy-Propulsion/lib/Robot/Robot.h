@@ -23,7 +23,6 @@ class Robot{
         bool endMovement();
         void stopMovement();
         void resumeMotor();
-        void roueLibreMovement();
 
         Kinetic kineticCurrent, kineticNext;
         Ghost ghost;

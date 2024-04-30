@@ -69,7 +69,6 @@ void threadOdometry(){
 void threadCommunication(){
   while(1){
     while(!mut.getState()){
-      //Serial.println("ici");
       comMega.update();
       comESP.update();
       threads.yield();
@@ -120,7 +119,7 @@ void threadEvitement(){
 void threadArretUrgence(){
   while(1){
     if (!stop && digitalRead(PIN_ARRET_URGENCE)==LOW){
-      BBB.robot->roueLibreMovement();
+      BBB.robot->stopMovement();
       /*Message messStop = newMessageEndAction(Teensy,Arduino,PaletJaune);
       comMega.send(messStop);
       comMega.update();*/
@@ -138,9 +137,7 @@ void threadArretUrgence(){
 
 void threadTirette(){
   while(mut.getState()){
-    //Serial.println("lllaaalllaa");
     if (tirette.testTirette()){
-      //Serial.println("ici");
       mut.unlock();
       threads.kill(threads.id());
     }
@@ -150,7 +147,6 @@ void threadTirette(){
 
 void threadEnd(){
   while(1){
-    //Serial.println("nes");
     while(!mut.getState()){
       if (first){
         Serial.println("Starttttttttttt");
@@ -171,7 +167,7 @@ void threadEnd(){
           threads.delay(1000*dt);
         }
         if(actMillis>=99000){
-          BBB.robot->roueLibreMovement();
+          BBB.robot->stopMovement();
           threads.suspend(2); //STOP ACTION + EVITEMENT SEULEMENT ATTENTION A L'ORDRE DES ADD THREADS
           threads.suspend(5);
           //threads.stop();

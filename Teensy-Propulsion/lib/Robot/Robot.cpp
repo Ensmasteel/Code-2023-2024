@@ -10,8 +10,8 @@ Robot::Robot(float x_ini, float y_ini, float theta_ini){
     this->kineticNext=Kinetic(x_ini,y_ini,theta_ini,0,0);
 
     this->ghost = Ghost(vectIni);
-    this->motorL =  Motor(PIN_LEFT_MOTOR_PWM, PIN_LEFT_MOTOR_IN1, PIN_LEFT_MOTOR_IN2, 12); 
-    this->motorR = Motor(PIN_RIGHT_MOTOR_PWM, PIN_RIGHT_MOTOR_IN1, PIN_RIGHT_MOTOR_IN2, 12);
+    this->motorL =  Motor(PIN_LEFT_MOTOR_PWM, PIN_LEFT_MOTOR_IN1, 13, true); 
+    this->motorR = Motor(PIN_RIGHT_MOTOR_PWM, PIN_RIGHT_MOTOR_IN1, 13, false);
 
     this->codeuseR = Codeuse(PIN_CODEUSE_DROITE_A, PIN_CODEUSE_DROITE_B, 8192*(1-SYM), 0.0566 , true);
     this->codeuseL = Codeuse(PIN_CODEUSE_GAUCHE_A, PIN_CODEUSE_GAUCHE_B, 16384*(1+SYM), 0.0566 , true);
@@ -92,15 +92,6 @@ void Robot::resumeMotor(){
 void Robot::stopMovement(){
     motorL.stop();
     motorR.stop();
-
-
-    motorL.actuate();
-    motorR.actuate();
-}
-
-void Robot::roueLibreMovement(){
-    motorL.roueLibre();
-    motorR.roueLibre();
 
 
     motorL.actuate();

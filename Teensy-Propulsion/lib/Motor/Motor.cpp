@@ -2,14 +2,12 @@
 
 //----------Motor Class----------//
 
-Motor::Motor(uint8_t pinPWM, uint8_t pinIN1, uint8_t pinIN2, uint8_t numberBitsPWM){
+Motor::Motor(uint8_t pinPWM, uint8_t pinIN1, uint8_t numberBitsPWM, bool rotationWay){
 
     this->pinPWM=pinPWM;
     pinMode(pinPWM,OUTPUT);
     this->pinIN1=pinIN1;
-    this->pinIN2=pinIN2;
     pinMode(pinIN1,OUTPUT);
-    pinMode(pinIN2, OUTPUT);
     this->numberBitsPWM=numberBitsPWM;
 
     maxPWM = (uint16_t) round(pow(2,numberBitsPWM)) - 1;
@@ -30,15 +28,11 @@ void Motor::actuate(){
     else{
         analogWrite(pinPWM,pwmValue);
     }
-    if(!isRoueLibre){
-        if(rotationWay){                  //ATTENTION : Peut dependre dans quel sens les differents moteurs sont montés physiquement (à l'envers il faudra inverser)
-            digitalWrite(pinIN1, HIGH); // cf datasheet of motor driver
-            digitalWrite(pinIN2, LOW);
-        }
-        else{
-            digitalWrite(pinIN1, LOW); // cf datasheet of motor driver
-            digitalWrite(pinIN2, HIGH);
-        }
+    if(rotationWay){                  //ATTENTION : Peut dependre dans quel sens les differents moteurs sont montés physiquement (à l'envers il faudra inverser)
+        digitalWrite(pinIN1, HIGH); 
+    }
+    else{
+        digitalWrite(pinIN1, LOW);
     }
 }
 
@@ -50,7 +44,6 @@ void Motor::stop(){
 
 void Motor::resume(){
     priorityOrder = false;
-    isRoueLibre = false;
 }
 
 void Motor::setPWMValue(float PIDOrder){
@@ -64,19 +57,6 @@ void Motor::setPWMValue(float PIDOrder){
     else{
         pwmValue = round(abs(PIDOrder)*maxPWM);
     }
-}
-
-void Motor::roueLibre()
-{
-    priorityPWMValue = 0;
-    priorityOrder = true;
-    
-    isRoueLibre = true;
-
-    digitalWrite(pinIN1, LOW); // cf datasheet of motor driver
-    digitalWrite(pinIN2, LOW);
-    analogWrite(pinPWM,0);
-
 }
 
 double Motor::idealFrequency(uint8_t numberBitsPWM){
@@ -109,6 +89,7 @@ double Motor::idealFrequency(uint8_t numberBitsPWM){
         frequency = 4577.64;
         break;
     default:
+        frequency = 0;
         break;
     }
     return frequency;
