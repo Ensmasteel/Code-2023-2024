@@ -1,53 +1,45 @@
 #ifndef ROBOT_H_
 #define ROBOT_H_
 
-#include "Vector.h"
-#include "Ghost.h"
 #include "Asservissement.h"
+#include "Ghost.h"
 #include "Motor.h"
-#include "pinSetup.h"
 #include "Odometry.h"
+#include "Vector.h"
+#include "pinSetup.h"
 
-class Robot{
+class Robot {
+   public:
+    Robot(float x_ini, float y_ini, float theta_ini);
+    Robot(){};
 
-    public :
+    bool getInMove() { return inMove; };
+    void updateMovement();
+    void startMovement(VectorOriented nextDest, bool isOnlyRotation, bool isBackward);
+    /*void Robot::startMovementBackwardDepot(VectorOriented nextDest);
+    void Robot::startMovementRecallageRotation(VectorOriented nextDest);*/
+    bool endMovement();
+    void stopMovement();
+    void resumeMotor();
 
-        Robot(float x_ini, float y_ini, float theta_ini);
-        Robot(){};
+    Kinetic kineticCurrent, kineticNext;
+    Ghost ghost;
 
-        bool getInMove(){return inMove;};
-        void updateMovement();
-        void startMovement(VectorOriented nextDest,bool isOnlyRotation,bool isBackward);
-        /*void startMovementBackwardDepot(VectorOriented nextDest);
-        void startMovementRecallageRotation(VectorOriented nextDest);*/
-        bool endMovement();
-        void stopMovement();
-        void resumeMotor();
+    Odometry odometry;
 
-        Kinetic kineticCurrent, kineticNext;
-        Ghost ghost;
+   private:
+    Asservissement controller;
+    Codeuse codeuseL, codeuseR;
+    Switch switchL, switchR;
 
-        Odometry odometry;
-    private :
+    bool inMove = false;
 
-        //Kinetic kineticCurrent, kineticNext;
-        
-        Asservissement controller;
-        Codeuse codeuseL, codeuseR;
-        Switch switchL,switchR;
+    Motor motorL, motorR;
+    VectorOriented vectIni;
 
-        bool inMove = false;
+    float translationOrder, rotationOrder;
 
-
-        Motor motorL,motorR;
-        VectorOriented vectIni;
-
-        float translationOrder, rotationOrder;
-        
-
-        float startActionMillis;
-
-
+    float startActionMillis;
 };
 
 #endif
