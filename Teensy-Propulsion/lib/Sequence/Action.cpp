@@ -19,6 +19,7 @@ void MoveAction::run(float dt, Robot* robot) {
         robot->startMovement(destination, isOnlyRotation, isBackward);
         hasStarted = true;
     }
+    robot->updateMovement();
     if (robot->movementDone()) {
         movementDone = true;
     }

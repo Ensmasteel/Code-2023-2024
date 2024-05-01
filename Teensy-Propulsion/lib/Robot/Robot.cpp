@@ -28,6 +28,10 @@ Robot::Robot(float x_ini, float y_ini, float theta_ini) {
 
 }
 
+Ghost& Robot::getGhost() {
+    return ghost;
+}
+
 void Robot::updateMovement() {
     ghost.actuatePosition(1.0 / 100.0);
     kineticNext = ghost.getControllerKinetic();

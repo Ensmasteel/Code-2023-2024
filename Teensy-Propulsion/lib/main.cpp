@@ -41,9 +41,6 @@ void threadSequence() {
         while (!mut.getState()) {
             threads.delay(1000 * dt);
             brain->update(dt, robot);
-            Serial.println(
-                "frequency : " +
-                String((float)1000.0 / (millis() - delaythreadqsfd)));
             delaythreadqsfd = millis();
         }
         threads.yield();
@@ -88,7 +85,6 @@ void threadTirette() {
     while (mut.getState()) {
         if (robot->testTirette()) {
             mut.unlock();
-            Serial.println("tirette");
             threads.kill(threads.id());
         }
         threads.yield();
@@ -129,10 +125,15 @@ void setup() {
     Sequence avancer_reculer(
         {
             new MoveAction(VectorOriented(0.3f, 0.0f, 0.0f), false, false),
-            new MoveAction(VectorOriented(0.3f, 0.0f, 0.0f), false, true)
+            new MoveAction(VectorOriented(0.0f, 0.0f, 0.0f), false, true)
         }
     );
-    brain = new SequenceManager({avancer_reculer});
+    Sequence tourner(
+        {
+            new MoveAction(VectorOriented(0.0f, 0.0f, PI), true, false)
+        }
+    );
+    brain = new SequenceManager({avancer_reculer, tourner});
 
     /* MISC */
     Serial.begin(115200);

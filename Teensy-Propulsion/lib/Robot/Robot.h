@@ -15,6 +15,8 @@ class Robot {
         Robot(float x_ini, float y_ini, float theta_ini);
         Robot(){};
 
+        Ghost& getGhost();
+
         void updateMovement();
         void startMovement(VectorOriented nextDest, bool isOnlyRotation, bool isBackward);
         bool movementDone();

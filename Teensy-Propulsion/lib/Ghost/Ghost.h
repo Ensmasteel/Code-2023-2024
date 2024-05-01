@@ -57,6 +57,7 @@ class Ghost {
      */
     void updateSpeeds(VectorOriented curPosition, VectorOriented lastPostion, float dt);
 
+    VectorOriented& getCurVectO() {return currentPosition;};
     Kinetic getControllerKinetic();
 
     void goToRobot(VectorOriented currentPosRobot);
