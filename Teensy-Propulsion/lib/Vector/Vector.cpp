@@ -69,11 +69,11 @@ void Vector::setY(float y){
     _y=y;
 }
 
-void Vector::printDebug(const String& prefix)
+void Vector::printTeleplot(const String& prefix)
 {
-    Serial.println(">" + prefix + " x :" + String(getX(),3));
-    Serial.println(">" + prefix + " y :" + String(getY(), 3));
-    Serial.println(">" + prefix + " xy :" + String(getX(),3) + ":" + String(getY(),3) + "|xy");
+    Logger::teleplot(">" + prefix + " x :" + String(getX(),3));
+    Logger::teleplot(">" + prefix + " y :" + String(getY(), 3));
+    Logger::teleplot(">" + prefix + " xy :" + String(getX(),3) + ":" + String(getY(),3) + "|xy");
 }
 
 //----------End Vector Class----------//
@@ -109,12 +109,12 @@ void VectorOriented::normalizeTheta()
     theta = normalizeAngle(theta);
 }
 
-void VectorOriented::printDebug(const String& prefix)
+void VectorOriented::printTeleplot(const String& prefix)
 {
-    Serial.println(">" + prefix+" x :" + String(getX(),3));
-    Serial.println(">" + prefix+" y :" + String(getY(), 3));
-    Serial.println(">" + prefix+" Th :" + String(getTheta(), 3));
-    Serial.println(">" + prefix + " xy :" + String(getX(),3) + ":" + String(getY(),3) + "|xy");
+    Logger::teleplot(">" + prefix+" x :" + String(getX(),3));
+    Logger::teleplot(">" + prefix+" y :" + String(getY(), 3));
+    Logger::teleplot(">" + prefix+" Th :" + String(getTheta(), 3));
+    Logger::teleplot(">" + prefix + " xy :" + String(getX(),3) + ":" + String(getY(),3) + "|xy");
 }
 
 //----------End Vector Oriented Class----------//
@@ -149,14 +149,14 @@ void Kinetic::setRotationSpeed(float rs){
     w=rs;
 }
 
-void Kinetic::printDebug(const String& prefix)
+void Kinetic::printTeleplot(const String& prefix)
 {
-    Serial.println(">" + prefix+" x :" + String(getX(),3));
-    Serial.println(">" + prefix+" y :" + String(getY(), 3));
-    Serial.println(">" + prefix + " xy :" + String(getX(),3) + ":" + String(getY(),3) + "|xy");
-    Serial.println(">" + prefix+" Th :" + String(getTheta(), 3));
-    Serial.println(">" + prefix+" v :" + String(getTranslationSpeed(), 3));
-    Serial.println(">" + prefix+" w :" + String(getRotationSpeed(), 3));
+    Logger::teleplot(">" + prefix+" x :" + String(getX(),3));
+    Logger::teleplot(">" + prefix+" y :" + String(getY(), 3));
+    Logger::teleplot(">" + prefix + " xy :" + String(getX(),3) + ":" + String(getY(),3) + "|xy");
+    Logger::teleplot(">" + prefix+" Th :" + String(getTheta(), 3));
+    Logger::teleplot(">" + prefix+" v :" + String(getTranslationSpeed(), 3));
+    Logger::teleplot(">" + prefix+" w :" + String(getRotationSpeed(), 3));
 }
 
 

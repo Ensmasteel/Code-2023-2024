@@ -54,6 +54,6 @@ void Odometry::updateOdometry(float dt){
     
     kinetics->setX( kinetics->getX() + moyenneAvanceCodeuses*(cos(kinetics->getTheta())));
     kinetics->setY( kinetics->getY() + moyenneAvanceCodeuses*(sin(kinetics->getTheta())));
+
+    kinetics->printTeleplot("ROBOT ");
 }
-
-

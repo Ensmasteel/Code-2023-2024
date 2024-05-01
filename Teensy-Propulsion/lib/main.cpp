@@ -36,12 +36,10 @@ void threadCommunications() {
 }
 
 void threadSequence() {
-    int delaythreadqsfd = 0;
     while (1) {
         while (!mut.getState()) {
             threads.delay(1000 * dt);
             brain->update(dt, robot);
-            delaythreadqsfd = millis();
         }
         threads.yield();
     }
@@ -130,7 +128,8 @@ void setup() {
     );
     Sequence tourner(
         {
-            new MoveAction(VectorOriented(0.0f, 0.0f, PI), true, false)
+            new MoveAction(VectorOriented(0.0f, 0.0f, PI), true, false),
+            new MoveAction(VectorOriented(0.0f, 0.0f, 0), true, false)
         }
     );
     brain = new SequenceManager({avancer_reculer, tourner});
@@ -139,13 +138,11 @@ void setup() {
     Serial.begin(115200);
     Serial1.begin(115200);
     Serial2.begin(115200);
-
     MoveProfilesSetup::setup();
-
     threads.setMicroTimer(10);
     threads.setDefaultTimeSlice(1);
-    mut.lock();
-    Logger::setup(&Serial, &Serial, true, true);
+    // mut.lock();
+    Logger::setup(&Serial, &Serial, &Serial, false, false, true);
     delay(3000);
     threads.addThread(threadEnd);
     threads.addThread(threadSequence);
@@ -155,6 +152,8 @@ void setup() {
     threads.addThread(threadReceiveMsgArduino);
     threads.addThread(threadCommunications);
     threads.addThread(threadTirette);
+
+    if (CrashReport) Serial.print(CrashReport);
 }
 
 void loop() {}

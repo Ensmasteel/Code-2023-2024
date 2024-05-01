@@ -66,7 +66,7 @@ class Vector
    */
    void setY(float y);
 
-   void printDebug(const String& prefix);
+   void printTeleplot(const String& prefix);
 
    private :
 
@@ -109,7 +109,7 @@ class VectorOriented : public Vector
     */
     void normalizeTheta();
 
-    void printDebug(const String& prefix);
+    void printTeleplot(const String& prefix);
 
     private :
 
@@ -161,7 +161,7 @@ class Kinetic : public VectorOriented{
      * x, y, Theta, v, w
      * @param prefix : string being printed in serial monitor
     */
-    void printDebug(const String& prefix);
+    void printTeleplot(const String& prefix);
 
     private :
 

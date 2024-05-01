@@ -200,6 +200,8 @@ void Ghost::actuatePosition(float dt) {
             trajFinished = true;
         }
     }
+
+    currentPosition.printTeleplot("GHOST ");
 }
 
 void Ghost::updateSpeeds(VectorOriented curPosition, VectorOriented lastPosition, float dt) {
