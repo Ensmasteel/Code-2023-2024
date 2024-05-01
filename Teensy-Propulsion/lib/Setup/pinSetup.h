@@ -17,4 +17,7 @@
 
 #define PIN_TIRETTE 31
 
+#define PIN_SWITCH_L 18
+#define PIN_SWITCH_R 19
+
 #endif

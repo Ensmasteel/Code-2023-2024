@@ -1,94 +1,69 @@
 #include <Arduino.h>
-#include <Logger.h>
-
-#include "ActionManager.h"
-#include "Communication.h"
-#include "Ghost.h"
-#include "Math_functions.h"
+#include "SequenceManager.h"
+#include "Sequence.h"
+#include "Action.h"
+#include "Robot.h"
+#include "Asservissement.h"
 #include "Message.h"
-#include "Motor.h"
 #include "TeensyThreads.h"
-#include "Tirette.h"
 #include "Vector.h"
-#include "pinSetup.h"
 
 #define dt 0.01
 
-Communication comMega = Communication(&Serial1);
-Communication comESP = Communication(&Serial2);
-
-const bool testEnv = false;
-ActionManager BBB = ActionManager(&comESP, &comMega, testEnv);
+Robot* robot;
+SequenceManager* brain;
 
 Threads::Mutex mut;
-
-Tirette tirette = Tirette(PIN_TIRETTE);
-
-void updateCommunicationEvitement() {
-    if (comESP.waitingRX()) {
-        Message currentMessage = comESP.peekOldestMessage();
-        switch (currentMessage.did) {
-            case MessLidar: {
-                BBB.setEnnemy(true);
-                BBB.setEnnemyDistance(currentMessage.distance / 1000.0);
-                BBB.setEnnemyAngle(
-                    normalizeAngle((currentMessage.angle) * 2 * PI / 360.0));
-                break;
-            }
-            default:
-                break;
-        }
-        comESP.popOldestMessage();
-    }
-}
 
 void threadOdometry() {
     while (1) {
         while (!mut.getState()) {
-            BBB.robot->odometry.updateOdometry(1.0 / 1000.0);
+            robot->updateOdometry(1.0 / 1000.0);
             threads.delay(1);
         }
         threads.yield();
     }
 }
 
-void threadCommunication() {
+void threadCommunications() {
     while (1) {
         while (!mut.getState()) {
-            comMega.update();
-            comESP.update();
+            robot->comMega.update();
+            robot->comESP.update();
             threads.yield();
         }
     }
 }
 
-void threadAction() {
+void threadSequence() {
     int delaythreadqsfd = 0;
     while (1) {
-        while (!mut.getState() && !BBB.getEnnemy()) {
+        while (!mut.getState()) {
             threads.delay(1000 * dt);
-            BBB.update(dt);
+            brain->update(dt, robot);
             Serial.println(
                 "frequency : " +
                 String((float)1000.0 / (millis() - delaythreadqsfd)));
             delaythreadqsfd = millis();
         }
-
         threads.yield();
     }
 }
 
-void threadEvitement() {
+void threadReceiveMsgArduino() {
     while (1) {
-        updateCommunicationEvitement();
-        if (!mut.getState() && BBB.getEnnemy()) {
-            if (BBB.robotInMovement()) {
-                BBB.evitement();
-            } else {
-                comESP = {&Serial2};
+        if (robot->comESP.waitingRX()) {
+            Message currentMessage = robot->comESP.peekOldestMessage();
+            switch (currentMessage.did) {
+                case MessLidar: {
+                    brain->setEnemy(true, currentMessage.distance / 1000.0, (currentMessage.angle) * 2 * PI / 360.0);
+                    break;
+                }
+                default:
+                    break;
             }
+            robot->comESP.popOldestMessage();
         }
-
         threads.delay(1000 * dt);
     }
 }
@@ -97,7 +72,7 @@ void threadArretUrgence() {
     bool stop = false;
     while (1) {
         if (!stop && digitalRead(PIN_ARRET_URGENCE) == LOW) {
-            BBB.robot->stopMovement();
+            robot->stopMovement();
             threads.stop();
             stop = true;
         }
@@ -111,7 +86,7 @@ void threadArretUrgence() {
 
 void threadTirette() {
     while (mut.getState()) {
-        if (tirette.testTirette()) {
+        if (robot->testTirette()) {
             mut.unlock();
             threads.kill(threads.id());
         }
@@ -132,13 +107,12 @@ void threadEnd() {
                 actMillis = millis() - startMillis;
                 if ((actMillis >= 90000 && actMillis < 99000)) {
                     threads.suspend(2);
-                    BBB.updateRetourBase();
+                    brain->forceRetourBase();
                     threads.delay(1000 * dt);
                 }
                 if (actMillis >= 99000) {
-                    BBB.robot->stopMovement();
-                    threads.suspend(2);  // STOP ACTION + EVITEMENT SEULEMENT
-                                         // ATTENTION A L'ORDRE DES ADD THREADS
+                    robot->stopMovement();
+                    threads.suspend(2);  // STOP ACTION + EVITEMENT SEULEMENT ATTENTION A L'ORDRE DES ADD THREADS
                     threads.suspend(5);
                     // threads.stop();
                 }
@@ -149,23 +123,35 @@ void threadEnd() {
 }
 
 void setup() {
+    /* SEQUENCES */
+    robot = new Robot(0.0f, 0.0f, 0.0f);
+    Sequence avancer_reculer(
+        {
+            new MoveAction(VectorOriented(0.3f, 0.0f, 0.0f), false, false),
+            new MoveAction(VectorOriented(0.3f, 0.0f, 0.0f), false, true)
+        }
+    );
+    brain = new SequenceManager({avancer_reculer});
+
+    /* MISC */
     Serial.begin(115200);
     Serial1.begin(115200);
     Serial2.begin(115200);
 
+    MoveProfilesSetup::setup();
+
     threads.setMicroTimer(10);
     threads.setDefaultTimeSlice(1);
     mut.lock();
-
     Logger::setup(&Serial, &Serial, true, true);
     delay(3000);
     threads.addThread(threadEnd);
-    threads.addThread(threadAction);
+    threads.addThread(threadSequence);
     threads.addThread(threadArretUrgence);
     pinMode(PIN_ARRET_URGENCE, INPUT_PULLDOWN);
     threads.addThread(threadOdometry);
-    threads.addThread(threadEvitement);
-    threads.addThread(threadCommunication);
+    threads.addThread(threadReceiveMsgArduino);
+    threads.addThread(threadCommunications);
     threads.addThread(threadTirette);
 }
 

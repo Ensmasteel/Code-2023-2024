@@ -14,12 +14,18 @@ Robot::Robot(float x_ini, float y_ini, float theta_ini) {
     this->codeuseR = Codeuse(PIN_CODEUSE_DROITE_A, PIN_CODEUSE_DROITE_B, 8192 * (1 - SYM), 0.0566, true);
     this->codeuseL = Codeuse(PIN_CODEUSE_GAUCHE_A, PIN_CODEUSE_GAUCHE_B, 16384 * (1 + SYM), 0.0566, true);
 
-    this->switchL = Switch(18);
-    this->switchR = Switch(19);
+    this->switchL = Switch(PIN_SWITCH_L);
+    this->switchR = Switch(PIN_SWITCH_R);
 
     this->odometry = Odometry(&codeuseL, &codeuseR, 0.2555, &switchL, &switchR, &kineticCurrent);
 
     this->controller = Asservissement(&translationOrder, &rotationOrder, &kineticCurrent, &kineticNext, 100.0);
+
+    this->comMega = Communication(&Serial1);
+    this->comESP = Communication(&Serial2);
+
+    this->tirette = Tirette(PIN_TIRETTE);
+
 }
 
 void Robot::updateMovement() {
@@ -35,32 +41,16 @@ void Robot::updateMovement() {
 void Robot::startMovement(VectorOriented nextDest, bool isOnlyRotation, bool isBackward) {
     ghost.computeTrajectory(nextDest, 0.3, MoveProfilesSetup::get(standard, !isOnlyRotation)->speedRamps, MoveProfilesSetup::get(standard, !isOnlyRotation)->cruisingSpeed, isOnlyRotation, isBackward);
     ghost.setLock(false);
-    inMove = true;
     startActionMillis = millis();
 }
 
-/*void Robot::startMovementBackwardDepot(VectorOriented nextDest){
-    Serial.println("compute");
-    ghost.computeTrajectory(nextDest,0.3, MoveProfilesSetup::get(standard, true)->speedRamps, MoveProfilesSetup::get(standard, true)->cruisingSpeed, false, true);
-    ghost.setLock(false);
-    startActionMillis=millis();
-}
-
-void Robot::startMovementRecallageRotation(VectorOriented nextDest){
-    ghost.computeTrajectory(nextDest,0.3, MoveProfilesSetup::get(standard, false)->speedRamps, MoveProfilesSetup::get(standard, false)->cruisingSpeed, true, false);
-    ghost.setLock(false);
-    startActionMillis=millis();
-}*/
-
-bool Robot::endMovement() {
+bool Robot::movementDone() {
     bool out = ghost.getTrajectoryIsFinished() && controller.close;
     if (out) {
         ghost.goToRobot(kineticCurrent);
-        inMove = false;
     } else if ((millis() - startActionMillis) > 10000) {
         Serial.println("Mouvement failed et arrete");
         out = true;
-        inMove = false;
         ghost.goToRobot(kineticCurrent);
     } else {
     }
@@ -78,4 +68,12 @@ void Robot::stopMovement() {
 
     motorL.actuate();
     motorR.actuate();
+}
+
+void Robot::updateOdometry(float dt) {
+    odometry.updateOdometry(dt);
+}
+
+bool Robot::testTirette() {
+    return tirette.testTirette();
 }

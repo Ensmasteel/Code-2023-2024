@@ -2,44 +2,53 @@
 #define ROBOT_H_
 
 #include "Asservissement.h"
+#include "Communication.h"
 #include "Ghost.h"
 #include "Motor.h"
 #include "Odometry.h"
 #include "Vector.h"
+#include "Tirette.h"
 #include "pinSetup.h"
 
 class Robot {
    public:
-    Robot(float x_ini, float y_ini, float theta_ini);
-    Robot(){};
+        Robot(float x_ini, float y_ini, float theta_ini);
+        Robot(){};
 
-    bool getInMove() { return inMove; };
-    void updateMovement();
-    void startMovement(VectorOriented nextDest, bool isOnlyRotation, bool isBackward);
-    /*void Robot::startMovementBackwardDepot(VectorOriented nextDest);
-    void Robot::startMovementRecallageRotation(VectorOriented nextDest);*/
-    bool endMovement();
-    void stopMovement();
-    void resumeMotor();
+        void updateMovement();
+        void startMovement(VectorOriented nextDest, bool isOnlyRotation, bool isBackward);
+        bool movementDone();
+        void stopMovement();
+        void resumeMotor();
 
-    Kinetic kineticCurrent, kineticNext;
-    Ghost ghost;
+        void updateOdometry(float dt);
 
-    Odometry odometry;
+        void openClaws();
+        void closeClaws();
+        void raiseClaws();
+        void lowerClaws();
+
+        bool testTirette();
+
+        Communication comMega;
+        Communication comESP;
 
    private:
-    Asservissement controller;
-    Codeuse codeuseL, codeuseR;
-    Switch switchL, switchR;
+        Asservissement controller;
+        Codeuse codeuseL, codeuseR;
+        Switch switchL, switchR;
+        Tirette tirette;
+        Odometry odometry;
+        Ghost ghost;
+        Kinetic kineticCurrent, kineticNext;
 
-    bool inMove = false;
+        Motor motorL, motorR;
+        VectorOriented vectIni;
 
-    Motor motorL, motorR;
-    VectorOriented vectIni;
+        float translationOrder, rotationOrder;
 
-    float translationOrder, rotationOrder;
+        float startActionMillis;
 
-    float startActionMillis;
 };
 
 #endif

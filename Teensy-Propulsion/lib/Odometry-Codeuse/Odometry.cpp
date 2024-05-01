@@ -24,7 +24,7 @@ Odometry::Odometry(Codeuse *codeuseL, Codeuse *codeuseR, float cSpacing, Switch 
     this->codeuseRight=codeuseR;
     this->codeusesSpacing=cSpacing;
     this->switchLeft=switchL;
-    this->switchRight=switchRight;
+    this->switchRight=switchR;
     this->kinetics=kinetic;
 }
 

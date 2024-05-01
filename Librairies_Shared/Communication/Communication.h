@@ -12,7 +12,7 @@ class Communication{
     public : 
 
     Communication(Stream* port);
-    Communication();
+    Communication() {};
     void send(Message mess);
     void update();
     void popOldestMessage();
