@@ -88,6 +88,7 @@ void threadTirette() {
     while (mut.getState()) {
         if (robot->testTirette()) {
             mut.unlock();
+            Serial.println("tirette");
             threads.kill(threads.id());
         }
         threads.yield();
