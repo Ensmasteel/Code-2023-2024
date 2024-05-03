@@ -1,101 +1,67 @@
 #include <Arduino.h>
-
 #include "Servo.h"
 #include "pinSetup.h"
 #include "Communication.h"
 #include "Logger.h"
-//#include "Actuators.h"
-//#include "Actuators_Manager.h"
 
-
-Servo servoPinceGauche,servoPinceDroit;
+Servo rato, panneaux;
 
 Communication comTeensy = Communication(&Serial1);
-Communication * ptrComTeensy;
-bool open;
-Message messStocke;
-//ActionID aid;
-//Actuator_Manager actuator_manager = Actuator_Manager(ptrComTeensy);
-
-//Actuator_Manager actuator_manager = Actuator_Manager();
-
-
-
-
-bool mess;
-
-void updateCommunicationTeensy(){
-  if (ptrComTeensy->waitingRX()){
-    Serial.println("a");
-    messStocke = ptrComTeensy->peekOldestMessage();
-    mess=true;
-  }
-  ptrComTeensy->popOldestMessage();
-}
-
+Message msg;
 
 void setup() {
-  Serial.begin(115200);
-  Serial1.begin(115200);
-  Logger::setup(&Serial,&Serial,true,true);
-  servoPinceGauche.attach(PIN_LEFT_SERVO_PWM);
-  servoPinceDroit.attach(PIN_RIGHT_SERVO_PWM);
-  servoPinceGauche.write(0);
-  servoPinceDroit.write(180);
-  open=true;
-  mess=false;
-  ptrComTeensy=&comTeensy;
+    Serial.begin(115200);
+    Serial1.begin(115200);
 
-}
+    Logger::setup(&Serial, &Serial, &Serial, false, false, false);
 
-//ouvert 0, ferme 20 (gauche) ouvert 180, ferme 160 (droit)
+    pinMode(PIN_ELEVATOR_STEP, OUTPUT);
+    pinMode(PIN_ELEVATOR_DIR, OUTPUT);
 
-void (loop)() {
-  ptrComTeensy->update();
-  updateCommunicationTeensy();
-  if(mess){
-    Serial1.println("11111111111");
-    if(open){
-        servoPinceGauche.write(25);
-        servoPinceDroit.write(155);
+    digitalWrite(PIN_ELEVATOR_DIR, HIGH);
+    for(int x = 0; x < 50; x++) {
+        digitalWrite(PIN_ELEVATOR_STEP,HIGH);
+        delayMicroseconds(500);
+        digitalWrite(PIN_ELEVATOR_STEP,LOW);
+        delayMicroseconds(500);
     }
-    else{
-        servoPinceGauche.write(0);
-        servoPinceDroit.write(180);
-    }
-    Message messSend = newMessageEndAction(Arduino,Teensy,PaletJaune);
-    ptrComTeensy->send(messSend);
-    open=!open;
-    mess=false;
-  }
-}
-/*
-void setup(){
-  delay(2000);
-  actuator_manager.init();
+
 }
 
-void (loop)(){
-aid = PaletMarron;
-actuator_manager.setIdAction(aid);
-actuator_manager.updateCommunication();
+void loop() {
 
-delay(3000);
+    comTeensy.update();
 
-aid = PaletJaune;
+    /* Handle the message from the Teensy */
+    // if (comTeensy.waitingRX()){
+    //     msg = comTeensy.peekOldestMessage();
 
-actuator_manager.setIdAction(aid);
-actuator_manager.updateCommunication();
-delay(3000);
-aid = PaletRose;
+    //     switch(msg.aid) {
+    //         case OpenClaws:
+    //             break;
+    //         case CloseClaws:
+    //             break;
+    //         case RaiseClaws:
+    //             if (msg.did == Todo) {
+    //                 digitalWrite(PIN_ELEVATOR_DIR, HIGH);
+    //                 for(int x = 0; x < 50; x++) {
+    //                     digitalWrite(PIN_ELEVATOR_STEP,HIGH);
+    //                     delayMicroseconds(500);
+    //                     digitalWrite(PIN_ELEVATOR_STEP,LOW);
+    //                     delayMicroseconds(500);
+    //                 }
+    //             }
+    //             break;
+    //         case LowerClaws:
+    //             break;
+    //         default:
+    //             break;
+    //     }
 
-actuator_manager.setIdAction(aid);
-actuator_manager.updateCommunication();
-delay(3000);
-aid = Depot;
+    //     comTeensy.popOldestMessage();
+    // }
 
-actuator_manager.setIdAction(aid);
-actuator_manager.updateCommunication();
-delay(3000);
+    /* Send a message to the Teensy */
+    // Message messSend = newMessageEndAction(Arduino,Teensy,PaletJaune);
+    // comTeensy.send(messSend);
 }
-*/

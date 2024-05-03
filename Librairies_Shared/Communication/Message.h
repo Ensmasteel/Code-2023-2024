@@ -25,16 +25,13 @@ Message newMessageToDo(EquipmentID s, EquipmentID d, ActionID aid);
 Message newMessageEndAction(EquipmentID s, EquipmentID d, ActionID aid);
 
 class MessageBox{
-
     public :
-
         MessageBox();
         Message pull();
         void push(Message Message2);
         int size();
         Message peek();
         bool getEmpty();
-
 
     private :
         uint8_t ifirst = 0;

@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include "Arduino.h"
+
 enum EquipmentID : uint8_t
 {
     EmptyE,
@@ -15,13 +16,11 @@ enum EquipmentID : uint8_t
 enum ActionID : uint8_t
 {
     Pause,
-    PaletMarron, //Recupere 3 palets marrons et les stocke dans la position marron
-    PaletJaune, //Recupere 3 palets jaunes et les stocke dans la position jaune
-    PaletRose, //Recupere 3 palets roses et les stocke dans la position rose
-    Depot //Construit un (et un seul) gateau
+    OpenClaws,
+    CloseClaws,
+    RaiseClaws,
+    LowerClaws
 };
-
-
 
 enum DataID : uint8_t
 {

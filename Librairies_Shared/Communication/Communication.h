@@ -2,6 +2,7 @@
 #define COMMUNICATION_H_
 
 #define ANTISPAM_MS 300
+
 #include "Message.h"
 #include "Arduino.h"
 #include <Stream.h>
