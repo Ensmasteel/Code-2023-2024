@@ -139,7 +139,13 @@ void setup() {
             new MoveAction(VectorOriented(0.0f, 0.0f, 0), true, false)
         }
     );
-    brain = new SequenceManager({}, 0);
+    Sequence recup_plantes(
+        {
+            new StaticAction(CLOSE_CLAWS),
+            new StaticAction(RAISE_CLAWS)
+        }
+    );
+    brain = new SequenceManager({recup_plantes});
 
     /* MISC */
     MoveProfilesSetup::setup();
