@@ -40,7 +40,7 @@ void lidar_callback(const std::vector<PointData> & laser_data) {
 }
 
 void setup() {
-    Serial.begin(114500);
+    Serial.begin(115200);
 
     Serial2.begin(230400);
     lidar.SetPopulateCallback(lidar_callback);

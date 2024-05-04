@@ -2,7 +2,10 @@
 #define PINSETUP_H_
 
 #define PIN_CLAWS 2
-#define PIN_ELEVATOR_STEP 20
-#define PIN_ELEVATOR_DIR 22
+#define PIN_ELEVATOR_STEP 33
+#define PIN_ELEVATOR_DIR 35
+#define PIN_ELEVATOR_M0 37
+#define PIN_ELEVATOR_M1 39
+#define PIN_ELEVATOR_M2 41
 
 #endif

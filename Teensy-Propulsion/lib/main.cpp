@@ -13,11 +13,11 @@
 Robot* robot;
 SequenceManager* brain;
 
-Threads::Mutex mut;
+Threads::Mutex tirrette_mut;
 
 void threadOdometry() {
     while (1) {
-        while (!mut.getState()) {
+        while (!tirrette_mut.getState()) {
             robot->updateOdometry(1.0 / 1000.0);
             threads.delay(1);
         }
@@ -27,7 +27,7 @@ void threadOdometry() {
 
 void threadCommunications() {
     while (1) {
-        while (!mut.getState()) {
+        while (!tirrette_mut.getState()) {
             robot->comMega.update();
             robot->comESP.update();
             threads.yield();
@@ -37,7 +37,7 @@ void threadCommunications() {
 
 void threadSequence() {
     while (1) {
-        while (!mut.getState()) {
+        while (!tirrette_mut.getState()) {
             threads.delay(1000 * dt);
             brain->update(dt, robot);
         }
@@ -45,13 +45,16 @@ void threadSequence() {
     }
 }
 
-void threadReceiveMsgArduino() {
+void threadReceiveMsgESP() {
     while (1) {
         if (robot->comESP.waitingRX()) {
             Message currentMessage = robot->comESP.peekOldestMessage();
             switch (currentMessage.did) {
                 case MessLidar: {
-                    brain->setEnemy(true, currentMessage.distance / 1000.0, (currentMessage.angle) * 2 * PI / 360.0);
+                    Serial.print(currentMessage.distance);
+                    Serial.print("    ");
+                    Serial.println(currentMessage.angle);
+                    brain->setEnemy(true, currentMessage.distance, currentMessage.angle);
                     break;
                 }
                 default:
@@ -80,9 +83,9 @@ void threadArretUrgence() {
 }
 
 void threadTirette() {
-    while (mut.getState()) {
+    while (tirrette_mut.getState()) {
         if (robot->testTirette()) {
-            mut.unlock();
+            tirrette_mut.unlock();
             threads.kill(threads.id());
         }
         threads.yield();
@@ -94,7 +97,7 @@ void threadEnd() {
     float startMillis;
     float actMillis;
     while (1) {
-        while (!mut.getState()) {
+        while (!tirrette_mut.getState()) {
             if (first) {
                 startMillis = millis();
                 first = false;
@@ -132,7 +135,7 @@ void setup() {
             new MoveAction(VectorOriented(0.0f, 0.0f, 0), true, false)
         }
     );
-    brain = new SequenceManager({avancer_reculer, tourner});
+    brain = new SequenceManager({}, 0);
 
     /* MISC */
     Serial.begin(115200);
@@ -141,15 +144,15 @@ void setup() {
     MoveProfilesSetup::setup();
     threads.setMicroTimer(10);
     threads.setDefaultTimeSlice(1);
-    // mut.lock();
-    Logger::setup(&Serial, &Serial, &Serial, false, false, true);
+    // tirrette_mut.lock();
+    Logger::setup(&Serial, &Serial, &Serial, false, false, false);
     delay(3000);
     threads.addThread(threadEnd);
     threads.addThread(threadSequence);
     threads.addThread(threadArretUrgence);
     pinMode(PIN_ARRET_URGENCE, INPUT_PULLDOWN);
     threads.addThread(threadOdometry);
-    threads.addThread(threadReceiveMsgArduino);
+    threads.addThread(threadReceiveMsgESP);
     threads.addThread(threadCommunications);
     threads.addThread(threadTirette);
 
