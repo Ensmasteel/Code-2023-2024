@@ -24,7 +24,7 @@ void setup() {
     elevator.setSpeed(3000);
     elevator.step(3500);
     elevator_raised = false;
-    elevator.setSpeed(1000);
+    elevator.setSpeed(800);
 }
 
 void loop() {
