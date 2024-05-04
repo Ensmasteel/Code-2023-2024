@@ -41,47 +41,47 @@ void setup() {
     }
     FastLED.show();
 
-    ldlidar::LDLidarDriverLinuxInterface* lidar_drv = ldlidar::LDLidarDriverLinuxInterface::Create();
-    lidar_drv->RegisterGetTimestampFunctional(std::bind(&GetTimestamp)); 
-    lidar_drv->EnablePointCloudDataFilter(true);
-    lidar_drv->Connect(ldlidar::LDType::LD_19);
-    lidar_drv->WaitLidarComm(3500);
-    lidar_drv->Start();
+    // ldlidar::LDLidarDriverLinuxInterface* lidar_drv = ldlidar::LDLidarDriverLinuxInterface::Create();
+    // lidar_drv->RegisterGetTimestampFunctional(std::bind(&GetTimestamp)); 
+    // lidar_drv->EnablePointCloudDataFilter(true);
+    // lidar_drv->Connect(ldlidar::LDType::LD_19);
+    // lidar_drv->WaitLidarComm(3500);
+    // lidar_drv->Start();
 
-    ldlidar::Points2D laser_scan_points;
-    int cnt = 100;
-    while (ldlidar::LDLidarDriverLinuxInterface::Ok()) {
-        if ((cnt--) <= 0) {
-            lidar_drv->Stop();
-        }
+    // ldlidar::Points2D laser_scan_points;
+    // int cnt = 100;
+    // while (ldlidar::LDLidarDriverLinuxInterface::Ok()) {
+    //     if ((cnt--) <= 0) {
+    //         lidar_drv->Stop();
+    //     }
 
-        switch (lidar_drv->GetLaserScanData(laser_scan_points, 1500)){
-            case ldlidar::LidarStatus::NORMAL:
-                //  output 2d point cloud data
-    lcd.setCursor(0,1);
-    lcd.print(String(laser_scan_points.size()));
-                // for (auto point : laser_scan_points) {
-                //     LOG_INFO_LITE("stamp(ns):%lu,angle:%f,distance(mm):%d,intensity:%d", 
-                //         point.stamp, point.angle, point.distance, point.intensity);
-                // }
-                break;
-            case ldlidar::LidarStatus::DATA_TIME_OUT:
-                lidar_drv->Stop();
-                exit(EXIT_FAILURE);
-                break;
-            case ldlidar::LidarStatus::DATA_WAIT:
-                break;
-            default:
-                break;
-        }
+    //     switch (lidar_drv->GetLaserScanData(laser_scan_points, 1500)){
+    //         case ldlidar::LidarStatus::NORMAL:
+    //             //  output 2d point cloud data
+    // lcd.setCursor(0,1);
+    // lcd.print(String(laser_scan_points.size()));
+    //             // for (auto point : laser_scan_points) {
+    //             //     LOG_INFO_LITE("stamp(ns):%lu,angle:%f,distance(mm):%d,intensity:%d", 
+    //             //         point.stamp, point.angle, point.distance, point.intensity);
+    //             // }
+    //             break;
+    //         case ldlidar::LidarStatus::DATA_TIME_OUT:
+    //             lidar_drv->Stop();
+    //             exit(EXIT_FAILURE);
+    //             break;
+    //         case ldlidar::LidarStatus::DATA_WAIT:
+    //             break;
+    //         default:
+    //             break;
+    //     }
 
-        delay(166);  // sleep 166ms , 6hz
-    }
+    //     delay(166);  // sleep 166ms , 6hz
+    // }
 
 
-    lidar_drv->Stop();
-    lidar_drv->Disconnect();
-    ldlidar::LDLidarDriverLinuxInterface::Destory(lidar_drv);
+    // lidar_drv->Stop();
+    // lidar_drv->Disconnect();
+    // ldlidar::LDLidarDriverLinuxInterface::Destory(lidar_drv);
 }
 
 void loop() {

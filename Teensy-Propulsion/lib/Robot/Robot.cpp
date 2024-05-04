@@ -17,7 +17,7 @@ Robot::Robot(float x_ini, float y_ini, float theta_ini) {
     this->switchL = Switch(PIN_SWITCH_L);
     this->switchR = Switch(PIN_SWITCH_R);
 
-    this->odometry = Odometry(&codeuseL, &codeuseR, 0.2555, &switchL, &switchR, &kineticCurrent);
+    this->odometry = Odometry(&codeuseL, &codeuseR, 0.295, &switchL, &switchR, &kineticCurrent);
 
     this->controller = Asservissement(&translationOrder, &rotationOrder, &kineticCurrent, &kineticNext, 100.0);
 
