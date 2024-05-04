@@ -21,8 +21,6 @@ class Action {
 
     protected:
         actionType id;
-        bool hasStarted;       
-        bool movementDone;
 };
 
 class MoveAction : public Action {
@@ -36,14 +34,21 @@ class MoveAction : public Action {
         VectorOriented destination;
         bool isOnlyRotation;
         bool isBackward;
+        bool hasStarted;
+        bool movementDone;
 };
 
 class StaticAction : public Action {
     public:
-        StaticAction(actionType id);
+        StaticAction(actionType aid, bool noDuration = false);
         bool checkClearPath(float distance, float angle) override;
         void run(float dt, Robot* robot) override;
         bool isDone() override;
+
+    private:
+        bool noDuration;
+        unsigned long msstart;
+        unsigned long msduration;
 };
 
 class DelayAction : public Action {

@@ -30,10 +30,32 @@ bool MoveAction::isDone() {
 }
 
 
-StaticAction::StaticAction(actionType id) {
-    id = id;
-    hasStarted = false;
-    movementDone = false;
+StaticAction::StaticAction(actionType aid, bool noDuration):
+    noDuration(noDuration)
+{
+    id = aid;
+    msstart = 0;
+    if (!noDuration) {
+        switch (id) {
+            case OPEN_CLAWS:
+                msduration = 300;
+                break;
+            case CLOSE_CLAWS:
+                msduration = 300;
+                break;
+            case RAISE_CLAWS:
+                msduration = 800;
+                break;
+            case LOWER_CLAWS:
+                msduration = 800;
+                break;
+            default:
+                msduration = 0;
+                break;
+        }
+    } else {
+        msduration = 0;
+    }
 }
 
 bool StaticAction::checkClearPath(float distance, float angle) {
@@ -41,7 +63,8 @@ bool StaticAction::checkClearPath(float distance, float angle) {
 }
 
 void StaticAction::run(float dt, Robot* robot) {
-    if (!hasStarted) {
+    if (!msstart) {
+        msstart = millis();
         switch (id) {
             case OPEN_CLAWS:
                 robot->openClaws();
@@ -58,14 +81,13 @@ void StaticAction::run(float dt, Robot* robot) {
             default:
                 break;
         }
-        hasStarted = true;
     }
-    movementDone = true;    // action is considered to do not have any duration
 }
 
 bool StaticAction::isDone() {
-    return movementDone;
+    return ((millis() - msstart) >= msduration);
 }
+
 
 DelayAction::DelayAction(unsigned long msduration):
     msduration(msduration)

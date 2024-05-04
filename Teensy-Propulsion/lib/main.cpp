@@ -121,6 +121,10 @@ void threadEnd() {
 }
 
 void setup() {
+    Serial.begin(115200);
+    Serial1.begin(115200);
+    Serial2.begin(115200);
+
     /* SEQUENCES */
     robot = new Robot(0.0f, 0.0f, 0.0f);
     Sequence avancer_reculer(
@@ -138,9 +142,6 @@ void setup() {
     brain = new SequenceManager({}, 0);
 
     /* MISC */
-    Serial.begin(115200);
-    Serial1.begin(115200);
-    Serial2.begin(115200);
     MoveProfilesSetup::setup();
     threads.setMicroTimer(10);
     threads.setDefaultTimeSlice(1);

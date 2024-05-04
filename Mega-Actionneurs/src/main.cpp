@@ -40,10 +40,7 @@ void loop() {
                 if (msg.did == Todo) rato.write(75);
                 break;
             case CloseClaws:
-                if (msg.did == Todo) {
-                    rato.write(33);
-                    delay(300);
-                }
+                if (msg.did == Todo) rato.write(33);
                 break;
             case RaiseClaws:
                 if (msg.did == Todo && !elevator_raised) {
@@ -63,8 +60,4 @@ void loop() {
 
         comTeensy.popOldestMessage();
     }
-
-    /* Send a message to the Teensy */
-    // Message messSend = newMessageEndAction(Arduino,Teensy,PaletJaune);
-    // comTeensy.send(messSend);
 }
