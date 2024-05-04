@@ -6,6 +6,7 @@
 
 enum actionType {
     MOVE,
+    DELAY,
     OPEN_CLAWS,
     CLOSE_CLAWS,
     RAISE_CLAWS,
@@ -43,6 +44,18 @@ class StaticAction : public Action {
         bool checkClearPath(float distance, float angle) override;
         void run(float dt, Robot* robot) override;
         bool isDone() override;
+};
+
+class DelayAction : public Action {
+    public:
+        DelayAction(unsigned long msduration);
+        bool checkClearPath(float distance, float angle) override;
+        void run(float dt, Robot* robot) override;
+        bool isDone() override;
+
+    private:
+        unsigned long msstart;
+        unsigned long msduration;
 };
 
 

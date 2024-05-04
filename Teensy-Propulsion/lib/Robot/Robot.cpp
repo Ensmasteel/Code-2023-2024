@@ -78,6 +78,23 @@ void Robot::updateOdometry(float dt) {
     odometry.updateOdometry(dt);
 }
 
+
+void Robot::openClaws() {
+    comMega.send(newMessageToDo(Teensy, Arduino, OpenClaws));
+}
+
+void Robot::closeClaws() {
+    comMega.send(newMessageToDo(Teensy, Arduino, CloseClaws));
+}
+
+void Robot::raiseClaws() {
+    comMega.send(newMessageToDo(Teensy, Arduino, RaiseClaws));
+}
+
+void Robot::lowerClaws() {
+    comMega.send(newMessageToDo(Teensy, Arduino, LowerClaws));
+}
+
 bool Robot::testTirette() {
     return tirette.testTirette();
 }

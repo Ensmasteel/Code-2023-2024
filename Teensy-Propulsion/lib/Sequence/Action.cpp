@@ -66,3 +66,22 @@ void StaticAction::run(float dt, Robot* robot) {
 bool StaticAction::isDone() {
     return movementDone;
 }
+
+DelayAction::DelayAction(unsigned long msduration):
+    msduration(msduration)
+{
+    msstart = 0;
+    id = DELAY;
+}
+
+bool DelayAction::checkClearPath(float distance, float angle) {
+    return true;
+}
+
+void DelayAction::run(float dt, Robot* robot) {
+    if (!msstart) msstart = millis(); 
+}
+
+bool DelayAction::isDone() {
+    return ((millis() - msstart) >= msduration);
+}
