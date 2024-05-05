@@ -47,11 +47,11 @@ void MoveProfilesSetup::setup() {
     get(brake, true)->set(0.0, 0.0, 0.0, 100.0, 100.0, 100.0, 0.001, 0.001);
     get(brake, false)->set(0.0, 0.0, 0.0, 100.0, 100.0, 100.0, 0.001, 0.001);
 
-    get(accurate, true)->set(0.0, 0.0, 0.0, 100.0, 100.0, 100.0, 0.001, 0.001);
-    get(accurate, false)->set(0.0, 0.0, 0.0, 100.0, 100.0, 100.0, 0.001, 0.001);
+    get(accurate,true)->set(32000.0 , 0.01 , 0.1 , 0.01 , 0.003 , 0.03 , 0.6 , 0.6);           //translation
+    get(accurate,false)->set(2200.0 , 0.02, 0.05 , 0.05 , 0.01 , 20*0.017 , 3.0/2.0*PI , 2*PI);   //rotation
 
     get(standard, true)->set(928.6, 9, 0.0, 0.01, 0.003, 0.03, 0.6, 0.6);                     // translation
-    get(standard, false)->set(1000, 0.0, 0.0, 0.05, 0.01, 20 * 0.017, 3.0 / 2.0 * PI, 2 * PI);  // rotation
+    get(standard, false)->set(500, 1, 0.0, 0.01, 0.003, 0.03, 3.0 / 2.0 * PI, 2 * PI);  // rotation
 
     get(fast, true)->set(0.0, 0.0, 0.0, 100.0, 100.0, 100.0, 0.001, 0.001);
     get(fast, false)->set(0.0, 0.0, 0.0, 100.0, 100.0, 100.0, 0.001, 0.001);
@@ -73,7 +73,7 @@ PID::PID(bool transla, float frequency) {
     dxF = new Filtre(0, frequency);
     close = true;
     tooFar = false;
-    currentProfile = MoveProfilesSetup::get(standard, transla);
+    currentProfile = MoveProfilesSetup::get(accurate, transla);
 
     iTerm = 0;
 }
