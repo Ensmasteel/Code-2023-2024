@@ -126,10 +126,13 @@ void setup() {
     Serial2.begin(115200);
 
     /* SEQUENCES */
-    robot = new Robot(0.0f, 0.0f, 0.0f);
+    robot = new Robot(1.0f, 1.0f, 0.0f);
     Sequence aller(
         {
-            new MoveAction(VectorOriented(1.0f, 0.0f, 0.0f), false, false)
+            new MoveAction(VectorOriented(1.25f, 0.75f, PI/2), false, false),
+            new MoveAction(VectorOriented(1.0f, 0.5f, PI), false, false),
+            new MoveAction(VectorOriented(0.75f, 0.75f, -PI/2), false, false),
+            new MoveAction(VectorOriented(1.0f, 1.0f, 0), false, false)
         }
     );
     brain = new SequenceManager({aller});
