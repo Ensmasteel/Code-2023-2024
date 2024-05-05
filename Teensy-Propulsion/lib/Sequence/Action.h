@@ -18,6 +18,7 @@ class Action {
         virtual bool checkClearPath(float distance, float angle) = 0;
         virtual void run(float dt, Robot* robot) = 0;
         virtual bool isDone() = 0;
+        virtual void reset() = 0;
 
     protected:
         actionType id;
@@ -29,6 +30,7 @@ class MoveAction : public Action {
         bool checkClearPath(float distance, float angle) override;
         void run(float dt, Robot* robot) override;
         bool isDone() override;
+        void reset() override;
 
     private:
         VectorOriented destination;
@@ -44,6 +46,7 @@ class StaticAction : public Action {
         bool checkClearPath(float distance, float angle) override;
         void run(float dt, Robot* robot) override;
         bool isDone() override;
+        void reset() override;
 
     private:
         bool noDuration;
@@ -57,6 +60,7 @@ class DelayAction : public Action {
         bool checkClearPath(float distance, float angle) override;
         void run(float dt, Robot* robot) override;
         bool isDone() override;
+        void reset() override;
 
     private:
         unsigned long msstart;

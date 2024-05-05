@@ -38,6 +38,7 @@ void SequenceManager::update(float dt, Robot* robot){
         }
 
         if (sequences[curSeqId].isDone()) {
+            sequences[curSeqId].reset();    // reset the sequences to be able to reuse it later
             curSeqId++;
         }
     }

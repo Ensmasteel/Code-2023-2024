@@ -11,6 +11,7 @@ class Sequence {
         bool checkClearPath(float distance, float angle);
         void run(float dt, Robot* robot);
         bool isDone();
+        void reset();
 
     private:
         std::vector<Action*> actions;

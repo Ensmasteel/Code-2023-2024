@@ -22,3 +22,8 @@ void Sequence::run(float dt, Robot* robot){
 bool Sequence::isDone(){
     return (curActionId >= actions.size());
 }
+
+void Sequence::reset(){
+    curActionId = 0;
+    for (auto& action : actions) action->reset();
+}

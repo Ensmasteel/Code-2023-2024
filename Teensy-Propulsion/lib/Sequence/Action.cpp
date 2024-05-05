@@ -29,6 +29,11 @@ bool MoveAction::isDone() {
     return movementDone;
 }
 
+void MoveAction::reset() {
+    hasStarted = false;
+    movementDone = false;
+}
+
 
 StaticAction::StaticAction(actionType aid, bool noDuration):
     noDuration(noDuration)
@@ -88,6 +93,10 @@ bool StaticAction::isDone() {
     return ((millis() - msstart) >= msduration);
 }
 
+void StaticAction::reset() {
+    msstart = 0;
+}
+
 
 DelayAction::DelayAction(unsigned long msduration):
     msduration(msduration)
@@ -106,4 +115,8 @@ void DelayAction::run(float dt, Robot* robot) {
 
 bool DelayAction::isDone() {
     return ((millis() - msstart) >= msduration);
+}
+
+void DelayAction::reset() {
+   msstart = 0;
 }
