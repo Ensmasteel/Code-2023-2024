@@ -26,15 +26,14 @@ void Communication::update(){
             port->write(out[i]);
         }
     }
-    //Logger::debugln((String)port->available());
     if(port->available()>=BYTES_MESS){
-        //Logger::debugln((String) port->available());
         uint8_t in[BYTES_MESS];
         while(port->peek()!=255 && port->available()>=BYTES_MESS){
             port->read();
         }
         for (int i=0 ; i<BYTES_MESS ; i++){
             in[i]=port->read();
+            delay(1);
         }
         Message mess;
         memcpy(&mess,in,sizeof(in));
