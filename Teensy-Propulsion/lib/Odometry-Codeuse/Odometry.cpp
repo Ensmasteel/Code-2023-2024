@@ -41,19 +41,82 @@ void Odometry::updateOdometry(float dt){
     codeuseLeft->actuate(dt);
     codeuseRight->actuate(dt);
 
-    float translationSpeedCodeuses = (codeuseLeft->getTranslationSpeedCodeuse() + codeuseRight->getTranslationSpeedCodeuse()) / 2;
-    float rotationSpeedCodeuses = (codeuseRight->getTranslationSpeedCodeuse() - codeuseLeft->getTranslationSpeedCodeuse()) / this->codeusesSpacing;
-    float thetaCodeuses = (codeuseRight->getDeltaAvance() - codeuseLeft->getDeltaAvance()) / this->codeusesSpacing; 
-    
-    kinetics->setTranslationSpeed(translationSpeedCodeuses);
-    kinetics->setRotationSpeed(rotationSpeedCodeuses);
-    kinetics->setTheta(thetaCodeuses+kinetics->getTheta());
-    kinetics->normalizeTheta();
-    
-    float moyenneAvanceCodeuses = (codeuseRight->getDeltaAvance() + codeuseLeft->getDeltaAvance()) / 2;
-    
-    kinetics->setX( kinetics->getX() + moyenneAvanceCodeuses*(cos(kinetics->getTheta())));
-    kinetics->setY( kinetics->getY() + moyenneAvanceCodeuses*(sin(kinetics->getTheta())));
+    const double dforward_codeuseL = codeuseLeft->getDeltaAvance ();
+    const double dforward_codeuseR = codeuseRight->getDeltaAvance ();
 
-    // kinetics->printTeleplot("ROBOT ");
+    const double theta = kinetics->getTheta ();
+
+    const double dforward = (dforward_codeuseL + dforward_codeuseR) / 2.0;  // pure translation movement
+
+    if (std::fabs(dforward_codeuseL - dforward_codeuseR) < std::numeric_limits<double>::epsilon ()) {  // Are they equal? TODO: dirty
+        // the robot strictly goes forward
+
+        *kinetics += Kinetic (
+            dforward * std::cos (theta),
+            dforward * std::sin (theta),
+            0.0,
+            dforward / dt,  // TODO
+            0.0
+        );
+    } else {
+        // The robot did a rotation
+
+        /*
+        Hypothesis:
+            - the robot moved along a circular trajectory.
+            - it was perpendicular to its trajectory at the beggining of its movemement.
+
+        Note that these are the exact values, there is no approximations unless these hypothesis.
+        */
+
+        const double dtheta = (dforward_codeuseR - dforward_codeuseL) / codeusesSpacing;   // new_theta = prev_theta + dtheta
+
+        const double rotation_circle_radius = (codeusesSpacing / 2.0) * (dforward_codeuseR + dforward_codeuseL) / (dforward_codeuseR - dforward_codeuseL);    // the radius of the imaginary circle
+
+        // Compute the movement relatively to the robot orientation
+        const double local_deltaX = std::fabs (rotation_circle_radius * (1 - std::cos (dtheta)));
+        const double local_deltaY = std::fabs (rotation_circle_radius * std::sin (dtheta));
+
+        if (dforward > 0.0) {
+            if (dtheta > 0.0) {
+                *kinetics += Kinetic (
+                    -local_deltaX * std::sin (theta) + local_deltaY * std::cos (theta),   // conversion from local to global
+                    local_deltaX * std::cos (theta) + local_deltaY * std::sin (theta),    // conversion from local to global
+                    dtheta,
+                    0.0,    // TODO V and W
+                    0.0
+                );
+            } else {
+                *kinetics += Kinetic (
+                    local_deltaX * std::sin (theta) + local_deltaY * std::cos (theta),   // conversion from local to global
+                    -local_deltaX * std::cos (theta) + local_deltaY * std::sin (theta),    // conversion from local to global
+                    dtheta,
+                    0.0,    // TODO V and W
+                    0.0
+                );
+            }
+        } else {
+            if (dtheta > 0.0) {
+                *kinetics += Kinetic (
+                    local_deltaX * std::sin (theta) - local_deltaY * std::cos (theta),   // conversion from local to global
+                    -local_deltaX * std::cos (theta) - local_deltaY * std::sin (theta),    // conversion from local to global
+                    dtheta,
+                    0.0,    // TODO V and W
+                    0.0
+                );
+            } else {
+                *kinetics += Kinetic (
+                    -local_deltaX * std::sin (theta) - local_deltaY * std::cos (theta),   // conversion from local to global
+                    local_deltaX * std::cos (theta) - local_deltaY * std::sin (theta),    // conversion from local to global
+                    dtheta,
+                    0.0,    // TODO V and W
+                    0.0
+                );
+            }
+        }
+
+        kinetics->normalizeTheta ();
+    }
+
+    kinetics->printTeleplot("ROBOT ");
 }

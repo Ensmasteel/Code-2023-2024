@@ -27,7 +27,7 @@ class Vector
    Vector operator+(const Vector &other);
    Vector operator-(const Vector &other);
    Vector operator*(const float scalaire);
-   void operator+=(const Vector &other);
+   Vector& operator+=(const Vector &other);
    bool operator==(const Vector &other);
 
    /**
@@ -68,7 +68,7 @@ class Vector
 
    void printTeleplot(const String& prefix);
 
-   private :
+   protected :
 
    float _x,_y;  
 
@@ -92,6 +92,7 @@ class VectorOriented : public Vector
 
     bool operator==(VectorOriented const &other);
     VectorOriented operator-(VectorOriented const &other);
+    VectorOriented& VectorOriented::operator+=(const VectorOriented& other);
 
     /**
      * @return Angle d'orientation theta
@@ -111,7 +112,7 @@ class VectorOriented : public Vector
 
     void printTeleplot(const String& prefix);
 
-    private :
+    protected :
 
     float theta;  
 
@@ -135,6 +136,7 @@ class Kinetic : public VectorOriented{
     Kinetic(float x=0.0, float y=0.0, float th=0.0, float v=0.0, float w=0.0);
 
     bool operator==(Kinetic const &other);
+    Kinetic& Kinetic::operator+=(const Kinetic& other);
 
     /**
      * @return Vitesse de translation du robot
@@ -163,7 +165,7 @@ class Kinetic : public VectorOriented{
     */
     void printTeleplot(const String& prefix);
 
-    private :
+    protected :
 
     float v; //Vitesse de translation du robot
     float w; //Vitesse de rotation du robot

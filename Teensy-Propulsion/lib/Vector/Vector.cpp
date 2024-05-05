@@ -32,9 +32,10 @@ Vector Vector::operator*(float scalaire){
     return Vector(_x * scalaire, _y * scalaire);
 }
 
-void Vector::operator+=(const Vector &other){
-    _x+=other._x;
-    _y+=other._y;
+Vector& Vector::operator+=(const Vector& other) {
+    _x += other._x;
+    _y += other._y;
+    return *this;
 }
 
 bool Vector::operator==(Vector const &other){
@@ -91,6 +92,13 @@ bool VectorOriented::operator==(VectorOriented const &other){
     return Vector::operator==(other) && abs(theta - other.theta) <=1e-6;
 }
 
+VectorOriented& VectorOriented::operator+=(const VectorOriented& other) {
+    _x += other._x;
+    _y += other._y;
+    theta += other.theta;
+    return *this;
+}
+
 VectorOriented VectorOriented::operator-(VectorOriented const &other){
     Vector vect = Vector::operator-(other);
     return VectorOriented(vect.getX(),vect.getY(), theta - other.theta); 
@@ -131,6 +139,15 @@ Kinetic::Kinetic(float x, float y, float th, float v, float w):VectorOriented(x,
 
 bool Kinetic::operator==(Kinetic const &other){
     return VectorOriented::operator==(other) && abs(v-other.v)<1e-6 && abs(w-other.w)<1e-6;
+}
+
+Kinetic& Kinetic::operator+=(const Kinetic& other) {
+    _x += other._x;
+    _y += other._y;
+    theta += other.theta;
+    v += other.v;
+    w += other.w;
+    return *this;
 }
 
 float Kinetic::getTranslationSpeed(){
