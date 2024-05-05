@@ -129,9 +129,9 @@ void setup() {
     robot = new Robot(1.0f, 1.0f, 0.0f);
     Sequence aller(
         {
-            new MoveAction(VectorOriented(1.25f, 0.75f, PI/2), false, false),
-            new MoveAction(VectorOriented(1.0f, 0.5f, PI), false, false),
-            new MoveAction(VectorOriented(0.75f, 0.75f, -PI/2), false, false),
+            new MoveAction(VectorOriented(1.5f, 0.5f, -PI/2), false, false),
+            new MoveAction(VectorOriented(1.0f, 0.0f, PI), false, false),
+            new MoveAction(VectorOriented(0.5f, 0.5f, PI/2), false, false),
             new MoveAction(VectorOriented(1.0f, 1.0f, 0), false, false)
         }
     );

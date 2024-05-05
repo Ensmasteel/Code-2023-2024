@@ -118,5 +118,5 @@ void Odometry::updateOdometry(float dt){
         kinetics->normalizeTheta ();
     }
 
-    kinetics->printTeleplot("ROBOT ");
+    // kinetics->printTeleplot("ROBOT ");
 }
