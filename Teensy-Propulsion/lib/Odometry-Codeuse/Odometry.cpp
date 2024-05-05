@@ -55,7 +55,7 @@ void Odometry::updateOdometry(float dt){
             dforward * std::cos (theta),
             dforward * std::sin (theta),
             0.0,
-            dforward / dt,  // TODO
+            dforward / dt,
             0.0
         );
     } else {
@@ -77,22 +77,25 @@ void Odometry::updateOdometry(float dt){
         const double local_deltaX = std::fabs (rotation_circle_radius * (1 - std::cos (dtheta)));
         const double local_deltaY = std::fabs (rotation_circle_radius * std::sin (dtheta));
 
+        const float v = (codeuseLeft->getTranslationSpeedCodeuse() + codeuseRight->getTranslationSpeedCodeuse()) / 2;
+        const float w = (codeuseRight->getTranslationSpeedCodeuse() - codeuseLeft->getTranslationSpeedCodeuse()) / this->codeusesSpacing;
+
         if (dforward > 0.0) {
             if (dtheta > 0.0) {
                 *kinetics += Kinetic (
                     -local_deltaX * std::sin (theta) + local_deltaY * std::cos (theta),   // conversion from local to global
                     local_deltaX * std::cos (theta) + local_deltaY * std::sin (theta),    // conversion from local to global
                     dtheta,
-                    0.0,    // TODO V and W
-                    0.0
+                    v,
+                    w
                 );
             } else {
                 *kinetics += Kinetic (
                     local_deltaX * std::sin (theta) + local_deltaY * std::cos (theta),   // conversion from local to global
                     -local_deltaX * std::cos (theta) + local_deltaY * std::sin (theta),    // conversion from local to global
                     dtheta,
-                    0.0,    // TODO V and W
-                    0.0
+                    v,
+                    w
                 );
             }
         } else {
@@ -101,16 +104,16 @@ void Odometry::updateOdometry(float dt){
                     local_deltaX * std::sin (theta) - local_deltaY * std::cos (theta),   // conversion from local to global
                     -local_deltaX * std::cos (theta) - local_deltaY * std::sin (theta),    // conversion from local to global
                     dtheta,
-                    0.0,    // TODO V and W
-                    0.0
+                    v,
+                    w
                 );
             } else {
                 *kinetics += Kinetic (
                     -local_deltaX * std::sin (theta) - local_deltaY * std::cos (theta),   // conversion from local to global
                     local_deltaX * std::cos (theta) - local_deltaY * std::sin (theta),    // conversion from local to global
                     dtheta,
-                    0.0,    // TODO V and W
-                    0.0
+                    v,
+                    w
                 );
             }
         }
@@ -118,5 +121,5 @@ void Odometry::updateOdometry(float dt){
         kinetics->normalizeTheta ();
     }
 
-    // kinetics->printTeleplot("ROBOT ");
+    kinetics->printTeleplot("ROBOT ");
 }
