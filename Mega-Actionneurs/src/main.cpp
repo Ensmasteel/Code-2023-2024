@@ -21,8 +21,8 @@ void setup() {
     rato.attach(PIN_CLAWS);
     rato.write(75);
 
-    elevator.setSpeed(3000);
-    elevator.step(3500);
+    // elevator.setSpeed(3000);
+    // elevator.step(3500);
     elevator_raised = false;
     elevator.setSpeed(800);
 }
