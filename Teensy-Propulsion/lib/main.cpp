@@ -126,26 +126,37 @@ void setup() {
     Serial2.begin(115200);
 
     /* SEQUENCES */
-    robot = new Robot(0.0f, 0.0f, 0.0f);
-    Sequence avancer_reculer(
+    robot = new Robot(0.9f, 0.0f, 0.0f);
+    Sequence aller(
         {
-            new MoveAction(VectorOriented(0.3f, 0.0f, 0.0f), false, false),
-            new MoveAction(VectorOriented(0.0f, 0.0f, 0.0f), false, true)
+            new MoveAction(VectorOriented(0.7f, 0.0f, 0.0f), false, false),
+            new MoveAction(VectorOriented(0.9f, 0.2f, PI * 0.4), false, false)
         }
     );
-    Sequence tourner(
+    Sequence retour(
         {
-            new MoveAction(VectorOriented(0.0f, 0.0f, PI), true, false),
-            new MoveAction(VectorOriented(0.0f, 0.0f, 0), true, false)
+            new MoveAction(VectorOriented(0.2f, 0.2f, -3 * PI / 4), false, false)
         }
     );
     Sequence recup_plantes(
         {
             new StaticAction(CLOSE_CLAWS),
-            new StaticAction(RAISE_CLAWS)
+            new StaticAction(RAISE_CLAWS, true)
         }
     );
-    brain = new SequenceManager({recup_plantes});
+    Sequence content(
+        {
+            new StaticAction(CLOSE_CLAWS),
+            new StaticAction(RAISE_CLAWS, true),
+            new MoveAction(VectorOriented(0.9f, 0.0f, PI), true, false),
+            new MoveAction(VectorOriented(0.2f, 0.3f, -0.7 * PI), false, false),
+            new MoveAction(VectorOriented(0.9f, 0.0f, 0), false, false),
+            new StaticAction(LOWER_CLAWS),
+            new StaticAction(OPEN_CLAWS, true),
+            new MoveAction(VectorOriented(0.6f, 0.0f, 0), false, true)
+        }
+    );
+    brain = new SequenceManager({content});
 
     /* MISC */
     MoveProfilesSetup::setup();
