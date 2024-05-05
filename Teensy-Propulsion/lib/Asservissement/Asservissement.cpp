@@ -50,8 +50,8 @@ void MoveProfilesSetup::setup() {
     get(accurate, true)->set(0.0, 0.0, 0.0, 100.0, 100.0, 100.0, 0.001, 0.001);
     get(accurate, false)->set(0.0, 0.0, 0.0, 100.0, 100.0, 100.0, 0.001, 0.001);
 
-    get(standard, true)->set(710.0, 0.0, 0.0, 0.01, 0.003, 0.03, 0.6, 0.6);                     // translation
-    get(standard, false)->set(1000.0, 0.0, 0.0, 0.05, 0.01, 20 * 0.017, 3.0 / 2.0 * PI, 2 * PI);  // rotation
+    get(standard, true)->set(928.6, 9, 0.0, 0.01, 0.003, 0.03, 0.6, 0.6);                     // translation
+    get(standard, false)->set(0.0, 0.0, 0.0, 0.05, 0.01, 20 * 0.017, 3.0 / 2.0 * PI, 2 * PI);  // rotation
 
     get(fast, true)->set(0.0, 0.0, 0.0, 100.0, 100.0, 100.0, 0.001, 0.001);
     get(fast, false)->set(0.0, 0.0, 0.0, 100.0, 100.0, 100.0, 0.001, 0.001);
