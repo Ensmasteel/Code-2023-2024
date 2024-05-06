@@ -18,7 +18,7 @@ Threads::Mutex tirrette_mut;
 void threadOdometry() {
     while (1) {
         while (!tirrette_mut.getState()) {
-            robot->updateOdometry(1.0 / 1000.0);
+            robot->updateOdometry(dt);
             threads.delay(1);
         }
         threads.yield();
@@ -40,6 +40,9 @@ void threadSequence() {
         while (!tirrette_mut.getState()) {
             threads.delay(1000 * dt);
             brain->update(dt, robot);
+                //kinetics->printTeleplot("ROBOT ");
+            robot->getGhost().getCurVectO().printTeleplot("GHOST ");
+            robot->getCurKinetic().printTeleplot("ROBOT ");
         }
         threads.yield();
     }
@@ -124,9 +127,15 @@ void setup() {
     Serial.begin(115200);
     Serial1.begin(115200);
     Serial2.begin(115200);
-
+    if (CrashReport) {
+        while(!Serial){
+            delay(1000);
+            Serial.print(CrashReport);
+            delay(5000);
+        }
+    }
     /* SEQUENCES */
-    robot = new Robot(1.0f, 1.0f, 0.0f);
+    robot = new Robot(0.0f, 0.0f, 0.0f);
     Sequence aller(
         {
             new MoveAction(VectorOriented(1.5f, 0.5f, -PI/2), false, false),
@@ -135,14 +144,22 @@ void setup() {
             new MoveAction(VectorOriented(1.0f, 1.0f, 0), false, false)
         }
     );
-    brain = new SequenceManager({aller});
+    Sequence test(
+        {
+            new MoveAction(VectorOriented(1.0f, 0.0f, 0.0f), false, false),
+        }
+    );
+    brain = new SequenceManager({test});
 
     /* MISC */
     MoveProfilesSetup::setup();
     threads.setMicroTimer(10);
     threads.setDefaultTimeSlice(1);
+
     // tirrette_mut.lock();
+    
     Logger::setup(&Serial, &Serial, &Serial, false, false, true);
+    
     delay(3000);
     threads.addThread(threadEnd);
     threads.addThread(threadSequence);
@@ -153,7 +170,6 @@ void setup() {
     threads.addThread(threadCommunications);
     threads.addThread(threadTirette);
 
-    if (CrashReport) Serial.print(CrashReport);
 }
 
 void loop() {}

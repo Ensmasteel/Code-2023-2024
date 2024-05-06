@@ -35,6 +35,9 @@ class Robot {
         Communication comMega;
         Communication comESP;
 
+
+        Kinetic& getCurKinetic() {return kineticCurrent;};
+
    private:
         Asservissement controller;
         Codeuse codeuseL, codeuseR;

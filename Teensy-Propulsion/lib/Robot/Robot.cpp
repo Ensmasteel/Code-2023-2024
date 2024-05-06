@@ -52,8 +52,14 @@ bool Robot::movementDone() {
     bool out = ghost.getTrajectoryIsFinished() && controller.close;
     if (out) {
         ghost.goToRobot(kineticCurrent);
+
+        // Mettre les moteurs à 0 en fin de mouvement
+        motorL.setPWMValue(0.0f);
+        motorR.setPWMValue(0.0f);
+        motorL.actuate();
+        motorR.actuate();
     } else if ((millis() - startActionMillis) > 10000) {
-        Serial.println("Mouvement failed et arrete");
+        //Serial.println("Mouvement failed et arrete");
         out = true;
         ghost.goToRobot(kineticCurrent);
     } else {

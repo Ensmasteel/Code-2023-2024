@@ -72,9 +72,9 @@ void Vector::setY(float y){
 
 void Vector::printTeleplot(const String& prefix)
 {
-    Logger::teleplot(">" + prefix + " x :" + String(getX(),3));
-    Logger::teleplot(">" + prefix + " y :" + String(getY(), 3));
-    Logger::teleplot(">" + prefix + " xy :" + String(getX(),3) + ":" + String(getY(),3) + "|xy");
+    Logger::teleplot(">" + prefix+" x :" + String(getX(), 3));
+    Logger::teleplot(">" + prefix+" y :" + String(getY(), 3));
+    Logger::teleplot(">" + prefix+" xy :" + String(getX(), 3) + ":" + String(getY(), 3) + "|xy");
 }
 
 //----------End Vector Class----------//
@@ -119,10 +119,11 @@ void VectorOriented::normalizeTheta()
 
 void VectorOriented::printTeleplot(const String& prefix)
 {
-    Logger::teleplot(">" + prefix+" x :" + String(getX(),3));
+    Logger::teleplot(">" + prefix+" x :" + String(getX(), 3));
     Logger::teleplot(">" + prefix+" y :" + String(getY(), 3));
+    Logger::teleplot(">" + prefix+" xy :" + String(getX(), 3) + ":" + String(getY(), 3) + "|xy");
     Logger::teleplot(">" + prefix+" Th :" + String(getTheta(), 3));
-    Logger::teleplot(">" + prefix + " xy :" + String(getX(),3) + ":" + String(getY(),3) + "|xy");
+
 }
 
 //----------End Vector Oriented Class----------//
@@ -168,14 +169,14 @@ void Kinetic::setRotationSpeed(float rs){
 
 void Kinetic::printTeleplot(const String& prefix)
 {
-    Logger::teleplot(">" + prefix+" x :" + String(getX(),3));
+
+    Logger::teleplot(">" + prefix+" x :" + String(getX(), 3));
     Logger::teleplot(">" + prefix+" y :" + String(getY(), 3));
-    Logger::teleplot(">" + prefix + " xy :" + String(getX(),3) + ":" + String(getY(),3) + "|xy");
+    Logger::teleplot(">" + prefix+" xy :" + String(getX(), 3) + ":" + String(getY(), 3) + "|xy");
     Logger::teleplot(">" + prefix+" Th :" + String(getTheta(), 3));
     Logger::teleplot(">" + prefix+" v :" + String(getTranslationSpeed(), 3));
     Logger::teleplot(">" + prefix+" w :" + String(getRotationSpeed(), 3));
+
 }
-
-
 
 //----------End Kinetic Class----------//

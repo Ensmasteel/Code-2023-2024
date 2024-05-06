@@ -1,5 +1,5 @@
 #include "Odometry.h"
-
+#include "Arduino.h"
 Switch::Switch(uint8_t pin)
 {
     this->pin = pin;
@@ -118,8 +118,11 @@ void Odometry::updateOdometry(float dt){
             }
         }
 
+        kinetics->setTranslationSpeed(v);
+        kinetics->setRotationSpeed(w);
+
         kinetics->normalizeTheta ();
     }
 
-    kinetics->printTeleplot("ROBOT ");
+    //kinetics->printTeleplot("ROBOT ");
 }
