@@ -8,12 +8,11 @@
 #define FRAMEBOX_LEN 10
 #define FRAME_NPOINT 12
 
-typedef struct {
-    typedef struct {
+typedef struct __attribute__((packed)){
+    typedef struct __attribute__((packed)){
         uint16_t distance;
-        uint8_t intensity;
+        uint8_t confidence;
     } point;
-
     uint8_t header;         // should be 0x54
     uint8_t ver_len;        // should be 0x2C
     uint16_t speed;         // deg per sec

@@ -11,7 +11,7 @@ Message newMessageCoordonnees(EquipmentID s, EquipmentID d, uint16_t x, uint16_t
     return out;
 }
 
-Message newMessageLidar(EquipmentID s, EquipmentID d, uint16_t distance,uint16_t angle){
+Message newMessageLidar(EquipmentID s, EquipmentID d, uint16_t distance, uint16_t angle){
     Message out;
     out.s=s;
     out.d=d;
