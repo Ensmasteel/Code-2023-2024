@@ -48,7 +48,7 @@ void normalizeAngle(float* angle){
 }
 
 void setup() {
-    Serial.begin(576000);
+    Serial.begin(115200);
     Serial2.begin(230400);
 
     Logger::setup(&Serial, &Serial, &Serial, false, false, false);
@@ -73,8 +73,7 @@ void setup() {
 
 void loop() {
 
-    /* Updates */
-    comTeensy.update();
+    /* Lidar updates */
     lidar.update();
 
     /* Handle the lidar messages */
@@ -126,9 +125,9 @@ void loop() {
                 }
                 distance /= (uint16_t) points_len;  // mm
                 angle /= (float) points_len * 0.001f; // millieme de rad
-                Serial.println(angle);
                 Logger::teleplot("> FRONT CLUSTER xy :" + String(distance / 1000.0f * std::cos(angle / 1000.0f),3) + ":" + String(distance / 1000.0f * std::sin(angle / 1000.0f),3) + "|xy");
                 comTeensy.send(newMessageLidar(ESP_32, Teensy, distance, (uint16_t) angle));
+                comTeensy.update();
                 cur_point_front = points_front_zone;
             }
             if (cur_point_back > points_back_zone) {
@@ -144,6 +143,7 @@ void loop() {
                 angle /= (float) points_len * 0.001f; // millieme de rad
                 Logger::teleplot("> BACK CLUSTER xy :" + String(distance / 1000.0f * std::cos(angle / 1000.0f),3) + ":" + String(distance / 1000.0f * std::sin(angle / 1000.0f),3) + "|xy");
                 comTeensy.send(newMessageLidar(ESP_32, Teensy, distance, (uint16_t) angle));
+                comTeensy.update();
                 cur_point_back = points_back_zone;
             }
             Logger::teleplot("> xy :0.5:0.5|xy");

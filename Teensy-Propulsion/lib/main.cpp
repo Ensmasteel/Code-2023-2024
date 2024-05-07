@@ -40,7 +40,6 @@ void threadSequence() {
         while (!tirrette_mut.getState()) {
             threads.delay(1000 * dt);
             brain->update(dt, robot);
-                //kinetics->printTeleplot("ROBOT ");
             robot->getGhost().getCurVectO().printTeleplot("GHOST ");
             robot->getCurKinetic().printTeleplot("ROBOT ");
         }
@@ -54,10 +53,8 @@ void threadReceiveMsgESP() {
             Message currentMessage = robot->comESP.peekOldestMessage();
             switch (currentMessage.did) {
                 case MessLidar: {
-                    Serial.print(currentMessage.distance);
-                    Serial.print("    ");
-                    Serial.println(currentMessage.angle);
-                    brain->setEnemy(true, currentMessage.distance, currentMessage.angle);
+                    Logger::teleplot("> LIDAR xy :" + String(currentMessage.distance / 1000.0f * std::cos(currentMessage.angle / 1000.0f),3) + ":" + String(currentMessage.distance / 1000.0f * std::sin(currentMessage.angle / 1000.0f),3) + "|xy");
+                    brain->setEnemy(true, currentMessage.distance / 1000.0f, currentMessage.angle / 1000.0f);
                     break;
                 }
                 default:
@@ -65,7 +62,7 @@ void threadReceiveMsgESP() {
             }
             robot->comESP.popOldestMessage();
         }
-        threads.delay(1000 * dt);
+        threads.yield();
     }
 }
 
@@ -157,9 +154,9 @@ void setup() {
     threads.setDefaultTimeSlice(1);
 
     // tirrette_mut.lock();
-    
+
     Logger::setup(&Serial, &Serial, &Serial, false, false, true);
-    
+
     delay(3000);
     threads.addThread(threadEnd);
     threads.addThread(threadSequence);
