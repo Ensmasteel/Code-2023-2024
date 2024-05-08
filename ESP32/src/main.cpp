@@ -62,7 +62,7 @@ void setup() {
 
     FastLED.addLeds<LED_TYPE, LED_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
     for(int i = 0; i < NUM_LEDS; i++) {
-        leds[i] = CRGB(20, 2, 0);
+        leds[i] = CRGB(255, 255, 255);
     }
     FastLED.show();
 
@@ -126,7 +126,7 @@ void loop() {
                 distance /= (uint16_t) points_len;  // mm
                 angle /= (float) points_len * 0.001f; // millieme de rad
                 Logger::teleplot("> FRONT CLUSTER xy :" + String(distance / 1000.0f * std::cos(angle / 1000.0f),3) + ":" + String(distance / 1000.0f * std::sin(angle / 1000.0f),3) + "|xy");
-                comTeensy.send(newMessageLidar(ESP_32, Teensy, distance, (uint16_t) angle));
+                comTeensy.send(newMessageLidar(ESP_32, Teensy, distance, (int16_t) angle));
                 comTeensy.update();
                 cur_point_front = points_front_zone;
             }
@@ -142,7 +142,7 @@ void loop() {
                 distance /= (uint16_t) points_len;  // mm
                 angle /= (float) points_len * 0.001f; // millieme de rad
                 Logger::teleplot("> BACK CLUSTER xy :" + String(distance / 1000.0f * std::cos(angle / 1000.0f),3) + ":" + String(distance / 1000.0f * std::sin(angle / 1000.0f),3) + "|xy");
-                comTeensy.send(newMessageLidar(ESP_32, Teensy, distance, (uint16_t) angle));
+                comTeensy.send(newMessageLidar(ESP_32, Teensy, distance, (int16_t) angle));
                 comTeensy.update();
                 cur_point_back = points_back_zone;
             }

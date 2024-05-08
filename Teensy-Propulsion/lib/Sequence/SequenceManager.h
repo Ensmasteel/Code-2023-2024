@@ -12,6 +12,8 @@ class SequenceManager {
         void update(float dt, Robot* robot);
         void forceRetourBase();
         void setEnemy(bool enemy, float enemyDst = -1.0f, float enemyAng = 0.0f);
+        bool getEnemy() {return enemy;};
+        void resume();
 
     private:
 

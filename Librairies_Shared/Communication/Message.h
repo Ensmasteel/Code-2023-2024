@@ -16,7 +16,7 @@ struct Message{
     uint16_t y = 0;
     ActionID aid = Pause;
     uint16_t distance = 0;
-    uint16_t angle = 0;
+    int16_t angle = 0;
 };
 
 Message newMessageLidar(EquipmentID s, EquipmentID d, uint16_t distance,uint16_t angle);

@@ -6,9 +6,9 @@ SequenceManager::SequenceManager(std::vector<Sequence> sequences, unsigned int c
 {}
 
 void SequenceManager::setEnemy(bool enemy, float enemyDst, float enemyAng){
-    enemy = enemy;
-    enemyDst = enemyDst;
-    enemyAng = enemyAng;
+    this->enemy = enemy;
+    this->enemyDst = enemyDst;
+    this->enemyAng = enemyAng;
 }
 
 void SequenceManager::forceRetourBase() {
@@ -22,9 +22,10 @@ void SequenceManager::update(float dt, Robot* robot){
                 // the enemy is not on our path
 
                 enemy = false;
-                enemyDst = -1.0f;
-                enemyAng = 0.0f;
-                
+                robot->resumeMotor();
+                this->resume();
+                robot->getGhost().setLock(false);
+
                 sequences[curSeqId].run(dt, robot);
             } else {
                 // we cannot pursue our sequence as there is someone on the way
@@ -32,6 +33,7 @@ void SequenceManager::update(float dt, Robot* robot){
                 // TODO: what can we do?
 
                 robot->stopMovement();
+                robot->getGhost().setLock(true);
             }
         } else {
             sequences[curSeqId].run(dt, robot);
@@ -41,5 +43,11 @@ void SequenceManager::update(float dt, Robot* robot){
             sequences[curSeqId].reset();    // reset the sequences to be able to reuse it later
             curSeqId++;
         }
+    }
+}
+
+void SequenceManager::resume() {
+    if (curSeqId < sequences.size ()) { // there is still a sequence to do
+        sequences[curSeqId].resume();
     }
 }

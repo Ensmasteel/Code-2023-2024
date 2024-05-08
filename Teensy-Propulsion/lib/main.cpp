@@ -9,6 +9,7 @@
 #include "Vector.h"
 
 #define dt 0.01
+#define MS_WAIT_ON_ENEMY 300
 
 Robot* robot;
 SequenceManager* brain;
@@ -18,7 +19,7 @@ Threads::Mutex tirrette_mut;
 void threadOdometry() {
     while (1) {
         while (!tirrette_mut.getState()) {
-            robot->updateOdometry(dt);
+            robot->updateOdometry(dt);  // TODO pas dt mais plutot 1ms
             threads.delay(1);
         }
         threads.yield();
@@ -48,6 +49,7 @@ void threadSequence() {
 }
 
 void threadReceiveMsgESP() {
+    unsigned int msLastMsg = 0;
     while (1) {
         if (robot->comESP.waitingRX()) {
             Message currentMessage = robot->comESP.peekOldestMessage();
@@ -60,8 +62,16 @@ void threadReceiveMsgESP() {
                 default:
                     break;
             }
+            msLastMsg = millis();
             robot->comESP.popOldestMessage();
         }
+        // if (brain->getEnemy() && (millis() - msLastMsg) > MS_WAIT_ON_ENEMY) {
+        //     // the enemy has not been detected for MS_WAIT_ON_ENEMY ms, we forget it
+        //     brain->setEnemy(false);
+        //     brain->resume();
+        //     robot->resumeMotor();
+        //     robot->getGhost().setLock(false);
+        // }
         threads.yield();
     }
 }
@@ -145,10 +155,16 @@ void setup() {
     );
     Sequence test(
         {
-            new MoveAction(VectorOriented(1.0f, 0.0f, 0.0f), false, false),
+            new MoveAction(VectorOriented(1.0f, 0.0f, 0.0f), false, false, true, true),
+            new MoveAction(VectorOriented(0.0f, 0.0f, 0.0f), false, true, true, true),
         }
     );
-    brain = new SequenceManager({test});
+    Sequence retour_base(
+        {
+            new MoveAction(VectorOriented(0.0f, 0.0f, PI), false, false, true, true)
+        }
+    );
+    brain = new SequenceManager({test, test, test, test, test, test, test, test, test, test, test, test, test, test, test, test, test, test, test, test, test, test, test, test, test, test, test, test, retour_base});
 
     /* MISC */
     MoveProfilesSetup::setup();

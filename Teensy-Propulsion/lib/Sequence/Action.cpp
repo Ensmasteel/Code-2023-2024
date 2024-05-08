@@ -13,7 +13,10 @@ MoveAction::MoveAction(VectorOriented destination, bool isOnlyRotation, bool isB
 }
 
 bool MoveAction::checkClearPath(float distance, float angle) {
-    return false;   // TODO
+    if (!isBackward && angle < 0.0f && angle > -PI / 2.0f) return false;    // front
+    if (isBackward && angle > PI / 2.0f) return false;  // back
+    return true;
+    // TODO
 }
 
 void MoveAction::run(float dt, Robot* robot) {

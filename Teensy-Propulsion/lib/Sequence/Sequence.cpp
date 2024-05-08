@@ -27,3 +27,9 @@ void Sequence::reset(){
     curActionId = 0;
     for (auto& action : actions) action->reset();
 }
+
+void Sequence::resume() {
+    if (curActionId < actions.size ()) { // there is still an action to do
+        actions[curActionId]->reset();
+    }
+}

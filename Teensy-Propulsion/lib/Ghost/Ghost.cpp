@@ -51,7 +51,7 @@ bool Ghost::computeTrajectory(VectorOriented endPosition, float deltaCurve, floa
             boolError = true;
             trajFinished = true;
         } else {
-            speedProfileRotation.setTrapezoidalFunction(nullInitSpeed? std::numeric_limits<float>::max() : speedRamps , nullFinalSpeed? std::numeric_limits<float>::max() : speedRamps, cruisingSpeed, abs(lenghtTrajectory));
+            speedProfileRotation.setTrapezoidalFunction(nullInitSpeed? speedRamps : std::numeric_limits<float>::max(), nullFinalSpeed? speedRamps : std::numeric_limits<float>::max(), cruisingSpeed, abs(lenghtTrajectory));
             durationTrajectory = speedProfileRotation.getDuration();
 
             trajectory_X.setPolynome(goaledPosition.getX());
@@ -109,7 +109,7 @@ bool Ghost::computeTrajectory(VectorOriented endPosition, float deltaCurve, floa
                 lenghtTrajectory += ((speed_v + last_speed_v) / 2.0) * deltaIntegral;
             }
 
-            speedProfileLinear.setTrapezoidalFunction(nullInitSpeed? std::numeric_limits<float>::max() : speedRamps , nullFinalSpeed? std::numeric_limits<float>::max() : speedRamps, cruisingSpeed, abs(lenghtTrajectory));
+            speedProfileLinear.setTrapezoidalFunction(nullInitSpeed? speedRamps : std::numeric_limits<float>::max(), nullFinalSpeed? speedRamps : std::numeric_limits<float>::max(), cruisingSpeed, abs(lenghtTrajectory));
             durationTrajectory = speedProfileRotation.getDuration();
         }
     }

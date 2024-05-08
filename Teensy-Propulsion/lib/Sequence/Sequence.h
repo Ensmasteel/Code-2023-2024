@@ -12,6 +12,7 @@ class Sequence {
         void run(float dt, Robot* robot);
         bool isDone();
         void reset();
+        void resume();
 
     private:
         std::vector<Action*> actions;
