@@ -114,15 +114,16 @@ void threadEnd() {
                 first = false;
             } else {
                 actMillis = millis() - startMillis;
-                if ((actMillis >= 90000 && actMillis < 99000)) {
-                    threads.suspend(2);
-                    brain->forceRetourBase();
-                    threads.delay(1000 * dt);
-                }
+                // if ((actMillis >= 90000 && actMillis < 99000)) {
+                //     threads.suspend(2);
+                //     brain->forceRetourBase();
+                //     threads.delay(1000 * dt);
+                // }
                 if (actMillis >= 99000) {
                     robot->stopMovement();
                     threads.suspend(2);  // STOP ACTION + EVITEMENT SEULEMENT ATTENTION A L'ORDRE DES ADD THREADS
                     threads.suspend(5);
+                    tirrette_mut.lock();
                     // threads.stop();
                 }
             }
@@ -146,12 +147,57 @@ void setup() {
 
     /* SEQUENCES */
     robot = new Robot(0.0f, 0.0f, 0.0f);
-    Sequence aller(
+    //  Sequences d'Attente  //
+    Sequence Attendre(
         {
-            new MoveAction(VectorOriented(1.5f, 0.5f, -PI/2), false, false),
-            new MoveAction(VectorOriented(1.0f, 0.0f, PI), false, false),
-            new MoveAction(VectorOriented(0.5f, 0.5f, PI/2), false, false),
-            new MoveAction(VectorOriented(1.0f, 1.0f, 0), false, false)
+            new DelayAction(1000)
+        }
+    );
+    // Sequences de pinces  //
+    Sequence Prendre_Pots(
+        {
+            new StaticAction(CLOSE_CLAWS),
+            new StaticAction(RAISE_CLAWS,true)
+        }
+    );
+    Sequence Poser_Pots(
+        {
+            new StaticAction(LOWER_CLAWS),
+            new StaticAction(OPEN_CLAWS)
+        }
+    );
+    Sequence Lacher_Pots(
+        {
+            new StaticAction(OPEN_CLAWS)
+        }
+    );
+    Sequence Descendre_Pince(
+        {
+            new StaticAction(LOWER_CLAWS)
+        }
+    );
+    //  Sequences de Servo Panneau  //
+    /*
+    Sequence Descendre_Pince(
+        {
+            new StaticAction("monter actionneur droite")
+        }
+    );
+    */
+    //  Sequences de déplacement  //
+    Sequence Retour_Base(
+        {
+            new MoveAction(VectorOriented(0.0f, 0.0f, PI), false, false, true, true)
+        }
+    );
+    Sequence Sortie_Base(
+        {
+            new MoveAction(VectorOriented(0.8f, 0.0f, 0.0f), false, false, true, true)
+        }
+    );
+    Sequence arriere(
+        {
+            new MoveAction(VectorOriented(0.f, 0.0f, 0.0f), false, true, true, true),
         }
     );
     Sequence test(
@@ -160,19 +206,30 @@ void setup() {
             new MoveAction(VectorOriented(0.0f, 0.0f, 0.0f), false, true, true, true),
         }
     );
-    Sequence retour_base(
+    /* 
+    Sequence Brain_Bleu(
         {
-            new MoveAction(VectorOriented(0.0f, 0.0f, PI), false, false, true, true)
+            new MoveAction(VectorOriented(1.0f, 0.0f, 0.0f), false, false, true, true),
+            new MoveAction(VectorOriented(0.0f, 0.0f, 0.0f), false, true, true, true),
         }
     );
-    brain = new SequenceManager({test, test, test, test, test, test, test, test, test, test, test, test, test, test, test, test, test, test, test, test, test, test, test, test, test, test, test, test, retour_base});
+    */
+    /* 
+    Sequence Brain_Jaune(
+        {
+            new MoveAction(VectorOriented(1.0f, 0.0f, 0.0f), false, false, true, true),
+            new MoveAction(VectorOriented(0.0f, 0.0f, 0.0f), false, true, true, true),
+        }
+    );
+    */
+    brain = new SequenceManager({Sortie_Base,Prendre_Pots,arriere,Poser_Pots});
 
     /* MISC */
     MoveProfilesSetup::setup();
     threads.setMicroTimer(10);
     threads.setDefaultTimeSlice(1);
 
-    // tirrette_mut.lock();
+    tirrette_mut.lock();
 
     Logger::setup(&Serial, &Serial, &Serial, false, false, true);
 
