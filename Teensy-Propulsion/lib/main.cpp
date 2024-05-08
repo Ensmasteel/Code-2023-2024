@@ -19,7 +19,7 @@ Threads::Mutex tirrette_mut;
 void threadOdometry() {
     while (1) {
         while (!tirrette_mut.getState()) {
-            robot->updateOdometry(dt);  // TODO pas dt mais plutot 1ms
+            robot->updateOdometry(1);  // TODO pas dt mais plutot 1ms
             threads.delay(1);
         }
         threads.yield();
@@ -54,12 +54,10 @@ void threadReceiveMsgESP() {
         if (robot->comESP.waitingRX()) {
             Message currentMessage = robot->comESP.peekOldestMessage();
             switch (currentMessage.did) {
-                case MessLidar: {
-                    tirrette_mut.lock();    // TORM for approval
+                case MessLidar:
                     Logger::teleplot("> LIDAR xy :" + String(currentMessage.distance / 1000.0f * std::cos(currentMessage.angle / 1000.0f),3) + ":" + String(currentMessage.distance / 1000.0f * std::sin(currentMessage.angle / 1000.0f),3) + "|xy");
                     brain->setEnemy(true, currentMessage.distance / 1000.0f, currentMessage.angle / 1000.0f);
                     break;
-                }
                 default:
                     break;
             }
@@ -222,14 +220,14 @@ void setup() {
         }
     );
     */
-    brain = new SequenceManager({Sortie_Base,Prendre_Pots,arriere,Poser_Pots});
+    brain = new SequenceManager({test, test, test, test, test});
 
     /* MISC */
     MoveProfilesSetup::setup();
     threads.setMicroTimer(10);
     threads.setDefaultTimeSlice(1);
 
-    tirrette_mut.lock();
+    // tirrette_mut.lock();
 
     Logger::setup(&Serial, &Serial, &Serial, false, false, true);
 
