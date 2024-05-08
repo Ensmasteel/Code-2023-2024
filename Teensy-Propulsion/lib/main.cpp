@@ -49,12 +49,13 @@ void threadSequence() {
 }
 
 void threadReceiveMsgESP() {
-    unsigned int msLastMsg = 0;
+    // unsigned int msLastMsg = 0;
     while (1) {
         if (robot->comESP.waitingRX()) {
             Message currentMessage = robot->comESP.peekOldestMessage();
             switch (currentMessage.did) {
                 case MessLidar: {
+                    tirrette_mut.lock();    // TORM for approval
                     Logger::teleplot("> LIDAR xy :" + String(currentMessage.distance / 1000.0f * std::cos(currentMessage.angle / 1000.0f),3) + ":" + String(currentMessage.distance / 1000.0f * std::sin(currentMessage.angle / 1000.0f),3) + "|xy");
                     brain->setEnemy(true, currentMessage.distance / 1000.0f, currentMessage.angle / 1000.0f);
                     break;
@@ -62,7 +63,7 @@ void threadReceiveMsgESP() {
                 default:
                     break;
             }
-            msLastMsg = millis();
+            // msLastMsg = millis();
             robot->comESP.popOldestMessage();
         }
         // if (brain->getEnemy() && (millis() - msLastMsg) > MS_WAIT_ON_ENEMY) {
