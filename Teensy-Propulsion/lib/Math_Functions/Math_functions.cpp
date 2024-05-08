@@ -168,9 +168,7 @@ float Trapezoidal_Function::f(float t) {
             } else if (t < duration) {
                 out = (duration - t) * _downRamp;
             }
-        }
-
-        else {
+        } else {
             if (t < tAcceleration) {
                 out = t * _upRamp;
             } else if (t < duration - _maxSpeed / _downRamp) {

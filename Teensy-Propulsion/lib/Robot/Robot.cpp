@@ -42,8 +42,8 @@ void Robot::updateMovement() {
     motorR.actuate();
 }
 
-void Robot::startMovement(VectorOriented nextDest, bool isOnlyRotation, bool isBackward) {
-    ghost.computeTrajectory(nextDest, 0.3, MoveProfilesSetup::get(standard, !isOnlyRotation)->speedRamps, MoveProfilesSetup::get(standard, !isOnlyRotation)->cruisingSpeed, isOnlyRotation, isBackward);
+void Robot::startMovement(VectorOriented nextDest, bool isOnlyRotation, bool isBackward, bool nullInitSpeed, bool nullFinalSpeed) {
+    ghost.computeTrajectory(nextDest, 0.3, MoveProfilesSetup::get(standard, !isOnlyRotation)->speedRamps, MoveProfilesSetup::get(standard, !isOnlyRotation)->cruisingSpeed, isOnlyRotation, isBackward, nullInitSpeed, nullFinalSpeed);
     ghost.setLock(false);
     startActionMillis = millis();
 }

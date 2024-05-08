@@ -41,7 +41,7 @@ class Ghost {
      * @param isBackward : bool, indique si on est en marche arriere
      * @return bool, false si aucune erreur true sinon
      */
-    bool computeTrajectory(VectorOriented endPosition, float deltaCurve, float speedRamps, float cruisingSpeed, bool isOnlyRotation, bool isBackward);
+    bool computeTrajectory(VectorOriented endPosition, float deltaCurve, float speedRamps, float cruisingSpeed, bool isOnlyRotation, bool isBackward, bool nullInitSpeed = true, bool nullFinalSpeed = true);
 
     /**
      * Calcule la position suivante du ghost en fonction de la trajectoire predetermine par la fonction computeTrajectory

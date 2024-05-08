@@ -26,9 +26,8 @@ bool Ghost::getLock() { return locked; }
 
 void Ghost::goToRobot(VectorOriented currentRobotPos) { this->currentPosition = currentRobotPos; }
 
-bool Ghost::computeTrajectory(VectorOriented endPosition, float deltaCurve, float speedRamps, float cruisingSpeed, bool isOnlyRotation, bool isBackward) {
+bool Ghost::computeTrajectory(VectorOriented endPosition, float deltaCurve, float speedRamps, float cruisingSpeed, bool isOnlyRotation, bool isBackward, bool nullInitSpeed, bool nullFinalSpeed) {
     bool boolError = false;  // booleen d'erreur
-    // deltaCurve = max(0.3,deltaCurve);
 
     goaledPosition = endPosition;
 
@@ -51,10 +50,8 @@ bool Ghost::computeTrajectory(VectorOriented endPosition, float deltaCurve, floa
         if (abs(lenghtTrajectory) < MIN_ROTATION) {
             boolError = true;
             trajFinished = true;
-        }
-
-        else {
-            speedProfileRotation.setTrapezoidalFunction(speedRamps, speedRamps, cruisingSpeed, abs(lenghtTrajectory));
+        } else {
+            speedProfileRotation.setTrapezoidalFunction(nullInitSpeed? std::numeric_limits<float>::max() : speedRamps , nullFinalSpeed? std::numeric_limits<float>::max() : speedRamps, cruisingSpeed, abs(lenghtTrajectory));
             durationTrajectory = speedProfileRotation.getDuration();
 
             trajectory_X.setPolynome(goaledPosition.getX());
@@ -67,9 +64,7 @@ bool Ghost::computeTrajectory(VectorOriented endPosition, float deltaCurve, floa
         if (abs(distanceToCover) < MIN_MOVEMENT) {
             boolError = true;
             trajFinished = true;
-        }
-
-        else {
+        } else {
             float x0 = currentPosition.getX();
             float y0 = currentPosition.getY();
             float x3 = goaledPosition.getX();
@@ -114,7 +109,7 @@ bool Ghost::computeTrajectory(VectorOriented endPosition, float deltaCurve, floa
                 lenghtTrajectory += ((speed_v + last_speed_v) / 2.0) * deltaIntegral;
             }
 
-            speedProfileLinear.setTrapezoidalFunction(speedRamps, speedRamps, cruisingSpeed, abs(lenghtTrajectory));
+            speedProfileLinear.setTrapezoidalFunction(nullInitSpeed? std::numeric_limits<float>::max() : speedRamps , nullFinalSpeed? std::numeric_limits<float>::max() : speedRamps, cruisingSpeed, abs(lenghtTrajectory));
             durationTrajectory = speedProfileRotation.getDuration();
         }
     }

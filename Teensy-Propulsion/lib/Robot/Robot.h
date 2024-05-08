@@ -18,7 +18,7 @@ class Robot {
         Ghost& getGhost();
 
         void updateMovement();
-        void startMovement(VectorOriented nextDest, bool isOnlyRotation, bool isBackward);
+        void startMovement(VectorOriented nextDest, bool isOnlyRotation, bool isBackward, bool nullInitSpeed, bool nullFinalSpeed);
         bool movementDone();
         void stopMovement();
         void resumeMotor();

@@ -26,7 +26,7 @@ class Action {
 
 class MoveAction : public Action {
     public:
-        MoveAction(VectorOriented destination, bool isOnlyRotation, bool isBackward);
+        MoveAction(VectorOriented destination, bool isOnlyRotation, bool isBackward, bool nullInitSpeed = true, bool nullFinalSpeed = true);
         bool checkClearPath(float distance, float angle) override;
         void run(float dt, Robot* robot) override;
         bool isDone() override;
@@ -38,6 +38,8 @@ class MoveAction : public Action {
         bool isBackward;
         bool hasStarted;
         bool movementDone;
+        bool nullInitSpeed;
+        bool nullFinalSpeed;
 };
 
 class StaticAction : public Action {

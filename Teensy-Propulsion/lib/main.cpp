@@ -124,6 +124,7 @@ void setup() {
     Serial.begin(115200);
     Serial1.begin(115200);
     Serial2.begin(115200);
+
     if (CrashReport) {
         while(!Serial){
             delay(1000);
@@ -131,6 +132,7 @@ void setup() {
             delay(5000);
         }
     }
+
     /* SEQUENCES */
     robot = new Robot(0.0f, 0.0f, 0.0f);
     Sequence aller(

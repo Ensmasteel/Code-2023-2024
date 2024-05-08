@@ -1,9 +1,11 @@
 #include "Action.h"
 
-MoveAction::MoveAction(VectorOriented destination, bool isOnlyRotation, bool isBackward):
+MoveAction::MoveAction(VectorOriented destination, bool isOnlyRotation, bool isBackward, bool nullInitSpeed, bool nullFinalSpeed):
     destination(destination),
     isOnlyRotation(isOnlyRotation),
-    isBackward(isBackward)
+    isBackward(isBackward),
+    nullInitSpeed(nullInitSpeed),
+    nullFinalSpeed(nullFinalSpeed)
 {
     id = MOVE;
     hasStarted = false;
@@ -16,7 +18,7 @@ bool MoveAction::checkClearPath(float distance, float angle) {
 
 void MoveAction::run(float dt, Robot* robot) {
     if (!hasStarted) {
-        robot->startMovement(destination, isOnlyRotation, isBackward);
+        robot->startMovement(destination, isOnlyRotation, isBackward, nullInitSpeed, nullFinalSpeed);
         hasStarted = true;
     }
     robot->updateMovement();
