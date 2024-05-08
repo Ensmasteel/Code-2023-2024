@@ -59,7 +59,7 @@ bool Robot::movementDone() {
         // motorL.actuate();
         // motorR.actuate();
     } else if ((millis() - startActionMillis) > 10000) {
-        //Serial.println("Mouvement failed et arrete");
+        Logger::info("Mouvement failed et arrete");
         out = true;
         ghost.goToRobot(kineticCurrent);
     } else {

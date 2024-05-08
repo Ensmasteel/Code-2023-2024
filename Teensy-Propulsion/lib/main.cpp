@@ -19,7 +19,7 @@ Threads::Mutex tirrette_mut;
 void threadOdometry() {
     while (1) {
         while (!tirrette_mut.getState()) {
-            robot->updateOdometry(1);  // TODO pas dt mais plutot 1ms
+            robot->updateOdometry(1);
             threads.delay(1);
         }
         threads.yield();
@@ -39,20 +39,21 @@ void threadCommunications() {
 void threadSequence() {
     while (1) {
         while (!tirrette_mut.getState()) {
-            threads.delay(1000 * dt);
             brain->update(dt, robot);
             robot->getGhost().getCurVectO().printTeleplot("GHOST ");
             robot->getCurKinetic().printTeleplot("ROBOT ");
+            threads.delay(1000 * dt);
         }
         threads.yield();
     }
 }
 
 void threadReceiveMsgESP() {
-    // unsigned int msLastMsg = 0;
+    unsigned int msLastMsg = 0;
+    Message currentMessage;
     while (1) {
         if (robot->comESP.waitingRX()) {
-            Message currentMessage = robot->comESP.peekOldestMessage();
+            currentMessage = robot->comESP.peekOldestMessage();
             switch (currentMessage.did) {
                 case MessLidar:
                     Logger::teleplot("> LIDAR xy :" + String(currentMessage.distance / 1000.0f * std::cos(currentMessage.angle / 1000.0f),3) + ":" + String(currentMessage.distance / 1000.0f * std::sin(currentMessage.angle / 1000.0f),3) + "|xy");
@@ -61,16 +62,16 @@ void threadReceiveMsgESP() {
                 default:
                     break;
             }
-            // msLastMsg = millis();
+            msLastMsg = millis();
             robot->comESP.popOldestMessage();
         }
-        // if (brain->getEnemy() && (millis() - msLastMsg) > MS_WAIT_ON_ENEMY) {
-        //     // the enemy has not been detected for MS_WAIT_ON_ENEMY ms, we forget it
-        //     brain->setEnemy(false);
-        //     brain->resume();
-        //     robot->resumeMotor();
-        //     robot->getGhost().setLock(false);
-        // }
+        if (brain->getEnemy() && (millis() - msLastMsg) > MS_WAIT_ON_ENEMY) {
+            // the enemy has not been detected for MS_WAIT_ON_ENEMY ms, we forget it
+            brain->setEnemy(false);
+            brain->resume();
+            robot->resumeMotor();
+            robot->getGhost().setLock(false);
+        }
         threads.yield();
     }
 }
@@ -112,17 +113,17 @@ void threadEnd() {
                 first = false;
             } else {
                 actMillis = millis() - startMillis;
-                // if ((actMillis >= 90000 && actMillis < 99000)) {
-                //     threads.suspend(2);
-                //     brain->forceRetourBase();
-                //     threads.delay(1000 * dt);
-                // }
+                if ((actMillis >= 90000 && actMillis < 99000)) {
+                    threads.suspend(2);
+                    brain->forceRetourBase();
+                    threads.delay(1000 * dt);
+                }
                 if (actMillis >= 99000) {
                     robot->stopMovement();
                     threads.suspend(2);  // STOP ACTION + EVITEMENT SEULEMENT ATTENTION A L'ORDRE DES ADD THREADS
                     threads.suspend(5);
                     tirrette_mut.lock();
-                    // threads.stop();
+                    threads.stop();
                 }
             }
             threads.yield();
@@ -198,10 +199,16 @@ void setup() {
             new MoveAction(VectorOriented(0.f, 0.0f, 0.0f), false, true, true, true),
         }
     );
-    Sequence test(
+    Sequence test_aller_retour(
         {
             new MoveAction(VectorOriented(1.0f, 0.0f, 0.0f), false, false, true, true),
             new MoveAction(VectorOriented(0.0f, 0.0f, 0.0f), false, true, true, true),
+        }
+    );
+    Sequence test_spin(
+        {
+            new MoveAction(VectorOriented(0.0f, 0.0f, PI), true, false, true, true),
+            new MoveAction(VectorOriented(0.0f, 0.0f, 0.0f), true, false, true, true),
         }
     );
     /* 
@@ -220,7 +227,7 @@ void setup() {
         }
     );
     */
-    brain = new SequenceManager({test, test, test, test, test});
+    brain = new SequenceManager({test_spin, test_spin, test_spin, test_spin, test_spin});
 
     /* MISC */
     MoveProfilesSetup::setup();
