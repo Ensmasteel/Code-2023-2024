@@ -26,15 +26,17 @@ void Communication::update(){
             port->write(out[i]);
         }
     }
-    while (port->available() > 0 && port->peek() != 255) port->read(); // we wait for a start byte
-    if(port->available() >= BYTES_MESS){
+    if(port->available()>=BYTES_MESS){
         uint8_t in[BYTES_MESS];
-        for (int i = 0 ; i < BYTES_MESS ; i++){
-            in[i] = port->read();
+        while(port->peek()!=255 && port->available()>=BYTES_MESS){
+            port->read();
         }
-
+        for (int i=0 ; i<BYTES_MESS ; i++){
+            in[i]=port->read();
+            delay(1);
+        }
         Message mess;
-        memcpy(&mess, in, sizeof(in));
+        memcpy(&mess,in,sizeof(in));
         receivingBox->push(mess);
     }
 }
