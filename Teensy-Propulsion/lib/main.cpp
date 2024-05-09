@@ -175,14 +175,7 @@ void setup() {
             new StaticAction(LOWER_CLAWS)
         }
     );
-    //  Sequences de Servo Panneau  //
-    /*
-    Sequence Descendre_Pince(
-        {
-            new StaticAction("monter actionneur droite")
-        }
-    );
-    */
+
     //  Sequences de déplacement  //
     Sequence Retour_Base(
         {
@@ -214,7 +207,7 @@ void setup() {
     /* 
     Sequence Brain_Bleu(
         {
-            new MoveAction(VectorOriented(1.0f, 0.0f, 0.0f), false, false, true, true),
+            new MoveAction(VectorOriented(0.45f, 0.45f, 0.0f), false, false, true, true),
             new MoveAction(VectorOriented(0.0f, 0.0f, 0.0f), false, true, true, true),
         }
     );

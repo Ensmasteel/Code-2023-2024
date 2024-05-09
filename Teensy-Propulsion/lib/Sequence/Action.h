@@ -10,7 +10,13 @@ enum actionType {
     OPEN_CLAWS,
     CLOSE_CLAWS,
     RAISE_CLAWS,
-    LOWER_CLAWS
+    LOWER_CLAWS,
+    START_MAGNET,
+    SHUTDOWN_MAGNET,
+    SOLAR_LEFT_ON,
+    SOLAR_LEFT_OFF,
+    SOLAR_RIGHT_ON,
+    SOLAR_RIGHT_OFF
 };
 
 class Action {

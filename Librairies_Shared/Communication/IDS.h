@@ -19,7 +19,13 @@ enum ActionID : uint8_t
     OpenClaws,
     CloseClaws,
     RaiseClaws,
-    LowerClaws
+    LowerClaws,
+    StartMagnet,
+    ShutdownMagnet,
+    SolarLeftOn,
+    SolarLeftOff,
+    SolarRightOn,
+    SolarRightOff
 };
 
 enum DataID : uint8_t
