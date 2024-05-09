@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <vector>
 #include <Arduino.h>
+#include "Logger.h"
 
 #define FRAMEBOX_LEN 10
 #define FRAME_NPOINT 12

@@ -103,7 +103,7 @@ void Lidar::update(){
             // the frame is a valid one
             recevBox.push(frame);
         } else {
-            Serial.println("Failed: " + String(frame.header) + "==84   "+ String(byte(frame.ver_len)) + "==44   "+ String(frame.crc8) + "==" + String(CalCRC8(in, BYTES_FRAME - sizeof(lidarFrame::crc8))));
+            Logger::info("Failed: " + String(frame.header) + "==84   "+ String(byte(frame.ver_len)) + "==44   "+ String(frame.crc8) + "==" + String(CalCRC8(in, BYTES_FRAME - sizeof(lidarFrame::crc8))));
         }
     }
 }
