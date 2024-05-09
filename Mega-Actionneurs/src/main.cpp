@@ -44,7 +44,7 @@ void setup() {
     elevator.setSpeed(800);
 
     pinMode(PIN_MAGNET, OUTPUT);
-    digitalWrite(PIN_MAGNET, HIGH);
+    digitalWrite(PIN_MAGNET, LOW);
 
     pinMode(PIN_BOUTON_ECRANT, INPUT);
     teamColor = JAUNE;
