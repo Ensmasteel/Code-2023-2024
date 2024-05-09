@@ -39,6 +39,15 @@ Message newMessageEndAction(EquipmentID s, EquipmentID d, ActionID aid){
     return out;
 }
 
+Message newMessageActuator(EquipmentID s, EquipmentID d, ActionID aid){
+    Message out;
+    out.s=s;
+    out.d=d;
+    out.did=MessActuator;
+    out.aid=aid;
+    return out;
+}
+
 MessageBox::MessageBox(){
     ifirst = 0;
     iend = 0;

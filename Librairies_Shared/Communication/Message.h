@@ -7,7 +7,7 @@
 
 #define MESSAGE_BOX_SIZE 10
 
-struct Message{
+typedef struct __attribute__((packed)){
     uint8_t start = 255;
     EquipmentID s = EmptyE;
     EquipmentID d = EmptyE;
@@ -17,12 +17,13 @@ struct Message{
     ActionID aid = Pause;
     uint16_t distance = 0;
     int16_t angle = 0;
-};
+} Message;
 
 Message newMessageLidar(EquipmentID s, EquipmentID d, uint16_t distance,uint16_t angle);
 Message newMessageCoordonnees(EquipmentID s, EquipmentID d, uint16_t x, uint16_t y);
 Message newMessageToDo(EquipmentID s, EquipmentID d, ActionID aid);
 Message newMessageEndAction(EquipmentID s, EquipmentID d, ActionID aid);
+Message newMessageActuator(EquipmentID s, EquipmentID d, ActionID aid);
 
 class MessageBox{
     public :
