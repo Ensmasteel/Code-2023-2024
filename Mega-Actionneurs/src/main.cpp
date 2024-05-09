@@ -3,6 +3,7 @@
 #include <Stepper.h>
 #include "pinSetup.h"
 #include "Communication.h"
+#include "IDS.h"
 #include "Logger.h"
 
 Servo rato;
@@ -22,6 +23,7 @@ enum {
     JAUNE,
     BLEU
 } teamColor;
+bool buttonReleased;
 
 void setup() {
     Serial.begin(115200);
@@ -48,6 +50,7 @@ void setup() {
 
     pinMode(PIN_BOUTON_ECRANT, INPUT);
     teamColor = JAUNE;
+    buttonReleased = true;
 }
 
 void loop() {
@@ -114,13 +117,19 @@ void loop() {
     }
 
     /* Handle screen's buttons */
-    if (digitalRead(PIN_BOUTON_ECRANT) == LOW) {
+    if (digitalRead(PIN_BOUTON_ECRANT) == LOW && buttonReleased) {
+        buttonReleased = false;
         if (teamColor == JAUNE) {
             teamColor = BLEU;
-            // TODO com teensy
+            comTeensy.send(newMessageActuator(Arduino, Teensy, SetTeamColorBleu));
         } else {
             teamColor = JAUNE;
-            // TODO com teensy
+            comTeensy.send(newMessageActuator(Arduino, Teensy, SetTeamColorJaune));
+        }
+    } else {
+        if (digitalRead(PIN_BOUTON_ECRANT) == HIGH) {
+            buttonReleased = true;
+            delay(100);
         }
     }
 }

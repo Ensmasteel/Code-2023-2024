@@ -13,6 +13,8 @@
 
 Robot* robot;
 SequenceManager* brain;
+SequenceManager* brain_bleu;
+SequenceManager* brain_jaune;
 
 Threads::Mutex tirrette_mut;
 
@@ -93,11 +95,38 @@ void threadArretUrgence() {
 }
 
 void threadTirette() {
+    Message msg;
     while (tirrette_mut.getState()) {
         if (robot->testTirette()) {
             tirrette_mut.unlock();
             threads.kill(threads.id());
         }
+
+        /* Handle team color changes while the tirette is not released */
+        robot->comMega.update();
+        if (robot->comMega.waitingRX()) {
+            msg = robot->comMega.peekOldestMessage();
+            switch (msg.did) {
+                case MessActuator:
+                    switch (msg.aid){
+                    case SetTeamColorJaune:
+                        brain = brain_jaune;
+                        robot->comESP.send(newMessageActuator(Teensy, ESP_32, SetTeamColorJaune));
+                        break;
+                    case SetTeamColorBleu:
+                        brain = brain_bleu;
+                        robot->comESP.send(newMessageActuator(Teensy, ESP_32, SetTeamColorBleu));
+                        break;
+                    default:
+                        break;
+                    }
+                    break;
+                default:
+                    break;
+            }
+            robot->comMega.popOldestMessage();
+        }
+
         threads.yield();
     }
 }
@@ -145,7 +174,6 @@ void setup() {
     }
 
     /* SEQUENCES */
-    robot = new Robot(0.0f, 1.5f, 0.0f);
     //  Sequences d'Attente  //
     Sequence Attendre(
         {
@@ -300,14 +328,19 @@ void setup() {
             new StaticAction(SHUTDOWN_MAGNET)
         }
     );
-    brain = new SequenceManager({bras}); 
+    robot = new Robot(0.0f, 1.5f, 0.0f);
+    brain_bleu = new SequenceManager({bras}); 
+    brain_jaune = new SequenceManager({bras});
+    // Default team color is blue
+    brain = brain_bleu;
+    robot->comESP.send(newMessageActuator(Teensy, ESP_32, SetTeamColorBleu));
 
     /* MISC */
     MoveProfilesSetup::setup();
     threads.setMicroTimer(10);
     threads.setDefaultTimeSlice(1);
 
-    //tirrette_mut.lock();
+    tirrette_mut.lock();
 
     Logger::setup(&Serial, &Serial, &Serial, false, false, true);
 
@@ -320,6 +353,8 @@ void setup() {
     threads.addThread(threadReceiveMsgESP);
     threads.addThread(threadCommunications);
     threads.addThread(threadTirette);
+
+    // TODO delete unused brain
 
 }
 

@@ -25,7 +25,9 @@ enum ActionID : uint8_t
     SolarLeftOn,
     SolarLeftOff,
     SolarRightOn,
-    SolarRightOff
+    SolarRightOff,
+    SetTeamColorJaune,
+    SetTeamColorBleu
 };
 
 enum DataID : uint8_t

@@ -57,7 +57,7 @@ void setup() {
     lcd.backlight();
     delay(100);
     lcd.clear();
-    lcd.setCursor(0,0);
+    lcd.setCursor(0, 0);
     lcd.print("   ENSMASTEEL   ");
 
     FastLED.addLeds<LED_TYPE, LED_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
@@ -72,6 +72,37 @@ void setup() {
 }
 
 void loop() {
+
+    /* Teensy updates */
+    comTeensy.update();
+
+    /* Handle the Teensy messages */
+    if (comTeensy.waitingRX()) {
+        teen_msg = comTeensy.peekOldestMessage();
+        switch (teen_msg.did) {
+            case MessActuator:
+                switch (teen_msg.aid){
+                case SetTeamColorJaune:
+                    lcd.setCursor(0, 0);
+                    lcd.print("   ENSMASTEEL   ");
+                    lcd.setCursor(0, 1);
+                    lcd.print("   TEAM JAUNE   ");
+                    break;
+                case SetTeamColorBleu:
+                    lcd.setCursor(0, 0);
+                    lcd.print("   ENSMASTEEL   ");
+                    lcd.setCursor(0, 1);
+                    lcd.print("   TEAM BLEU    ");
+                    break;
+                default:
+                    break;
+                }
+                break;
+            default:
+                break;
+        }
+        comTeensy.popOldestMessage();
+    }
 
     /* Lidar updates */
     lidar.update();
