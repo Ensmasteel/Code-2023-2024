@@ -17,7 +17,7 @@ Robot::Robot(float x_ini, float y_ini, float theta_ini) {
     this->switchL = Switch(PIN_SWITCH_L);
     this->switchR = Switch(PIN_SWITCH_R);
 
-    this->odometry = Odometry(&codeuseL, &codeuseR, 0.2979, &switchL, &switchR, &kineticCurrent);
+    this->odometry = Odometry(&codeuseL, &codeuseR, 0.30053, &switchL, &switchR, &kineticCurrent);
 
     this->controller = Asservissement(&translationOrder, &rotationOrder, &kineticCurrent, &kineticNext, 100.0);
 
@@ -99,6 +99,30 @@ void Robot::raiseClaws() {
 
 void Robot::lowerClaws() {
     comMega.send(newMessageToDo(Teensy, Arduino, LowerClaws));
+}
+
+void Robot::startMagnet() {
+    comMega.send(newMessageToDo(Teensy, Arduino, StartMagnet));
+}
+
+void Robot::shutdownMagnet() {
+    comMega.send(newMessageToDo(Teensy, Arduino, ShutdownMagnet));
+}
+
+void Robot::solarLeftOn() {
+    comMega.send(newMessageToDo(Teensy, Arduino, SolarLeftOn));
+}
+
+void Robot::solarLeftOff() {
+    comMega.send(newMessageToDo(Teensy, Arduino, SolarLeftOff));
+}
+
+void Robot::solarRightOn() {
+    comMega.send(newMessageToDo(Teensy, Arduino, SolarRightOn));
+}
+
+void Robot::solarRightOff() {
+    comMega.send(newMessageToDo(Teensy, Arduino, SolarRightOff));
 }
 
 bool Robot::testTirette() {

@@ -51,7 +51,7 @@ void MoveProfilesSetup::setup() {
     get(accurate,false)->set(2200.0 , 0.02, 0.05 , 0.05 , 0.01 , 20*0.017 , 3.0/2.0*PI , 2*PI);   //rotation
 
     get(standard, true)->set(32000.0f, 0.01f, 0.1f, 0.005f, 0.003f, 0.01f, 0.6f, 0.6f);                     // translation
-    get(standard, false)->set(2200.0f , 0.02f, 0.0f, 0.05f , 0.01f , 20*0.017f , 3.0/2.0*PI , 2*PI);  // rotation
+    get(standard, false)->set(4000.0f , 0.02f, 0.05f, 0.05f , 0.01f , 20*0.017f , 3.0/2.0*PI , 2*PI);  // rotation
 
     get(fast, true)->set(0.0, 0.0, 0.0, 100.0, 100.0, 100.0, 0.001, 0.001);
     get(fast, false)->set(0.0, 0.0, 0.0, 100.0, 100.0, 100.0, 0.001, 0.001);

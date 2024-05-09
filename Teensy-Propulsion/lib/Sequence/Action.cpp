@@ -60,6 +60,30 @@ StaticAction::StaticAction(actionType aid, bool noDuration):
             case LOWER_CLAWS:
                 msduration = 800;
                 break;
+            case START_MAGNET:
+                msduration = 0;
+                break;
+
+            case SHUTDOWN_MAGNET:
+                msduration = 0;
+                break;
+
+            case SOLAR_LEFT_ON:
+                msduration = 300;
+                break;
+
+            case SOLAR_LEFT_OFF:
+                msduration = 300;
+                break;
+
+            case SOLAR_RIGHT_ON:
+                msduration = 300;
+                break;
+
+            case SOLAR_RIGHT_OFF:
+                msduration = 300;
+                break;
+
             default:
                 msduration = 0;
                 break;
@@ -89,6 +113,30 @@ void StaticAction::run(float dt, Robot* robot) {
             case LOWER_CLAWS:
                 robot->lowerClaws();
                 break;
+            case START_MAGNET:
+                robot->startMagnet();
+                break;
+
+            case SHUTDOWN_MAGNET:
+                robot->shutdownMagnet();
+                break;
+
+            case SOLAR_LEFT_ON:
+                robot->solarLeftOn();
+                break;
+
+            case SOLAR_LEFT_OFF:
+                robot->solarLeftOff();
+                break;
+
+            case SOLAR_RIGHT_ON:
+                robot->solarRightOn();
+                break;
+
+            case SOLAR_RIGHT_OFF:
+                robot->solarRightOff();
+                break;
+
             default:
                 break;
         }

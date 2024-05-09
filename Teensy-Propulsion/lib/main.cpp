@@ -145,7 +145,7 @@ void setup() {
     }
 
     /* SEQUENCES */
-    robot = new Robot(0.0f, 0.0f, 0.0f);
+    robot = new Robot(0.0f, 1.5f, 0.0f);
     //  Sequences d'Attente  //
     Sequence Attendre(
         {
@@ -249,24 +249,24 @@ void setup() {
     //robot = new Robot(0.0f, 2.0f, 0.0f);
     Sequence Moins_Rush_Bleu(
         {
-            new MoveAction(VectorOriented(1.0f, 2-0.85f, -0.7045f), false, false, true, true),
+            new MoveAction(VectorOriented(0.5f, 1.5-0.4f, -0.7045f), false, false, true, true),
             new StaticAction(CLOSE_CLAWS),
-            new MoveAction(VectorOriented(1.0f, 2-0.85f, -PI/2), true, false, true, true),
-            new MoveAction(VectorOriented(0.8f, 2-1.95f, 0.0f), false, false, true, true),
+            new MoveAction(VectorOriented(0.5f, 1.5-0.4f, -PI/2), true, false, true, true),
+            new MoveAction(VectorOriented(0.5f, 0.05, 0.0f), false, false, true, true),
             new StaticAction(SOLAR_RIGHT_ON),
-            new MoveAction(VectorOriented(0.0f, 2-1.95f, 0.0f), false, true, true, true),
+            new MoveAction(VectorOriented(0.0f, 0.05, 0.0f), false, true, true, true),
             new StaticAction(OPEN_CLAWS,true),
             new StaticAction(SOLAR_RIGHT_OFF)
         }
     );
     Sequence Moins_Rush_Jaune(
         {
-            new MoveAction(VectorOriented(1.0f, 0.85f, 0.7045f), false, false, true, true),
+            new MoveAction(VectorOriented(0.5f, 0.40f, 0.7045f), false, false, true, true),
             new StaticAction(CLOSE_CLAWS),
-            new MoveAction(VectorOriented(1.0f, 0.85f, PI/2), true, false, true, true),
-            new MoveAction(VectorOriented(0.8f, 1.95f, PI), false, false, true, true),
+            new MoveAction(VectorOriented(0.5f, 0.40f, PI/2), true, false, true, true),
+            new MoveAction(VectorOriented(0.5f, 1.45f, PI), false, false, true, true),
             new StaticAction(SOLAR_RIGHT_ON),
-            new MoveAction(VectorOriented(0.0f, 1.95f, PI), false, false, true, true),
+            new MoveAction(VectorOriented(0.0f, 1.45f, PI), false, false, true, true),
             new StaticAction(OPEN_CLAWS,true),
             new StaticAction(SOLAR_RIGHT_OFF)
         }
@@ -277,12 +277,30 @@ void setup() {
             new MoveAction(VectorOriented(1.0f, 0.0f, 0.0f), false, false, true, true)
         }
     );
-    Sequence test(
+    Sequence Carre(
         {
-            new MoveAction(VectorOriented(0.5f, 0.0f, 0.0f), false, false, true, true)
+            new MoveAction(VectorOriented(0.6f, 0.0f, 0.0f), false, false, true, true),
+            new MoveAction(VectorOriented(0.6f, 0.0f, -PI/2), true, false, true, true),
+            new MoveAction(VectorOriented(0.6f, -0.6f, -PI/2), false, false, true, true),
+            new MoveAction(VectorOriented(0.6f, -0.6f, PI), true, false, true, true),
+            new MoveAction(VectorOriented(0.0f, -0.6f, PI), false, false, true, true),
+            new MoveAction(VectorOriented(0.0f, -0.6f, PI/2), true, false, true, true),
+            new MoveAction(VectorOriented(0.0f, 0.0f, PI/2), false, false, true, true),
+            new MoveAction(VectorOriented(0.0f, 0.0f, 0.0f), true, false, true, true)
         }
     );
-    brain = new SequenceManager({test});
+    Sequence bras(
+        {
+            new StaticAction(START_MAGNET,true),
+            new StaticAction(SOLAR_RIGHT_ON,true),
+            new StaticAction(SOLAR_LEFT_ON),
+            new DelayAction(3000),
+            new StaticAction(SOLAR_RIGHT_OFF,true),
+            new StaticAction(SOLAR_LEFT_OFF,true),
+            new StaticAction(SHUTDOWN_MAGNET)
+        }
+    );
+    brain = new SequenceManager({bras}); 
 
     /* MISC */
     MoveProfilesSetup::setup();

@@ -29,6 +29,12 @@ class Robot {
         void closeClaws();
         void raiseClaws();
         void lowerClaws();
+        void startMagnet();
+        void shutdownMagnet();
+        void solarLeftOn();
+        void solarLeftOff();
+        void solarRightOn();
+        void solarRightOff();
 
         bool testTirette();
 
