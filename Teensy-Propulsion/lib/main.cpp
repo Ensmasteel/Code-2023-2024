@@ -213,14 +213,14 @@ void setup() {
             new MoveAction(VectorOriented(0.94f, 1.35f, -PI/2), false, false, true, true),
 
             new MoveAction(VectorOriented(1.11f, 1.73f, -PI/2), false, true, true, true),
-            new MoveAction(VectorOriented(1.11f, 1.765f, -PI/2), false, true, true, true),
+            new MoveAction(VectorOriented(1.11f, 1.77f, -PI/2), false, true, true, true, 1500),
             new MoveAction(VectorOriented(1.23f, 1.47f, -PI/4), false, false, true, true),
-            new MoveAction(VectorOriented(0.26f, 1.77f, 0.0f), false, true, true, true),
+            new MoveAction(VectorOriented(0.26f, 1.72f, 0.0f), false, true, true, true),
             new StaticAction(SHUTDOWN_MAGNET,true),
             new StaticAction(RAISE_CLAWS,true),
-            new MoveAction(VectorOriented(0.45f, 1.75f, -PI/8), false, false, true, true),
-            new MoveAction(VectorOriented(0.45f, 1.75f, PI), true, false, true, true),
-            new MoveAction(VectorOriented(0.22f, 1.77f, PI), false, false, true, true),
+            new MoveAction(VectorOriented(0.45f, 1.72f, 0.0f), false, false, true, true),
+            new MoveAction(VectorOriented(0.45f, 1.72f, PI), true, false, true, true),
+            new MoveAction(VectorOriented(0.22f, 1.72f, PI), false, false, true, true),
             new StaticAction(OPEN_CLAWS)
 
             /*
