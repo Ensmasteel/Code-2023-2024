@@ -6,15 +6,22 @@
 #include "Logger.h"
 
 Servo rato;
+
 Stepper elevator(200, PIN_ELEVATOR_STEP, PIN_ELEVATOR_DIR);
+bool elevator_raised;
+
 Servo SolarLeft;
 Servo SolarRight;
-bool elevator_raised;
 bool IsSolarLeft;
 bool IsSolarRight;
 
 Communication comTeensy = Communication(&Serial1);
 Message msg;
+
+enum {
+    JAUNE,
+    BLEU
+} teamColor;
 
 void setup() {
     Serial.begin(115200);
@@ -27,13 +34,20 @@ void setup() {
 
     SolarLeft.attach(PIN_SOLARLEFT);
     SolarRight.attach(PIN_SOLARRIGHT);
+    IsSolarLeft = false;
+    IsSolarRight = false;
+    SolarRight.write(10);
 
     elevator.setSpeed(3000);
     elevator.step(3500);
     elevator_raised = false;
-    IsSolarLeft = false;
-    IsSolarRight = false;
     elevator.setSpeed(800);
+
+    pinMode(PIN_MAGNET, OUTPUT);
+    digitalWrite(PIN_MAGNET, HIGH);
+
+    pinMode(PIN_BOUTON_ECRANT, INPUT);
+    teamColor = JAUNE;
 }
 
 void loop() {
@@ -64,10 +78,10 @@ void loop() {
                 }
                 break;
             case StartMagnet:
-                if (msg.did == Todo) digitalWrite(PIN_MAGNET,HIGH);
+                if (msg.did == Todo) digitalWrite(PIN_MAGNET, HIGH);
                 break;
             case ShutdownMagnet:
-                if (msg.did == Todo) digitalWrite(PIN_MAGNET,LOW);
+                if (msg.did == Todo) digitalWrite(PIN_MAGNET, LOW);
                 break;
             case SolarLeftOn:
                 if (msg.did == Todo && !IsSolarRight) {
@@ -83,13 +97,13 @@ void loop() {
                 break;
             case SolarRightOn:
                 if (msg.did == Todo && !IsSolarRight) {
-                    //SolarRight.write(90);
+                    SolarRight.write(100);
                     IsSolarRight = true;
                 }
                 break;
             case SolarRightOff:
                 if (msg.did == Todo) {
-                    //SolarRight.write(0);
+                    SolarRight.write(10);
                     IsSolarRight = false;
                 }
                 break;
@@ -97,5 +111,16 @@ void loop() {
                 break;
         }
         comTeensy.popOldestMessage();
+    }
+
+    /* Handle screen's buttons */
+    if (digitalRead(PIN_BOUTON_ECRANT) == LOW) {
+        if (teamColor == JAUNE) {
+            teamColor = BLEU;
+            // TODO com teensy
+        } else {
+            teamColor = JAUNE;
+            // TODO com teensy
+        }
     }
 }
