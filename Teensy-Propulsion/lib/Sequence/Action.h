@@ -24,15 +24,17 @@ class Action {
         virtual bool checkClearPath(float distance, float angle) = 0;
         virtual void run(float dt, Robot* robot) = 0;
         virtual bool isDone() = 0;
-        virtual void reset() = 0;
+        virtual void reset() = 0; 
 
     protected:
         actionType id;
+        unsigned long msstart;
+        unsigned long msduration;
 };
 
 class MoveAction : public Action {
     public:
-        MoveAction(VectorOriented destination, bool isOnlyRotation, bool isBackward, bool nullInitSpeed = true, bool nullFinalSpeed = true);
+        MoveAction(VectorOriented destination, bool isOnlyRotation, bool isBackward, bool nullInitSpeed = true, bool nullFinalSpeed = true, unsigned int mstimeout = 0);
         bool checkClearPath(float distance, float angle) override;
         void run(float dt, Robot* robot) override;
         bool isDone() override;
@@ -42,10 +44,10 @@ class MoveAction : public Action {
         VectorOriented destination;
         bool isOnlyRotation;
         bool isBackward;
-        bool hasStarted;
         bool movementDone;
         bool nullInitSpeed;
         bool nullFinalSpeed;
+        unsigned int mstimeout;
 };
 
 class StaticAction : public Action {
@@ -58,8 +60,6 @@ class StaticAction : public Action {
 
     private:
         bool noDuration;
-        unsigned long msstart;
-        unsigned long msduration;
 };
 
 class DelayAction : public Action {
@@ -69,10 +69,6 @@ class DelayAction : public Action {
         void run(float dt, Robot* robot) override;
         bool isDone() override;
         void reset() override;
-
-    private:
-        unsigned long msstart;
-        unsigned long msduration;
 };
 
 

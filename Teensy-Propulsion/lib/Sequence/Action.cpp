@@ -1,6 +1,6 @@
 #include "Action.h"
 
-MoveAction::MoveAction(VectorOriented destination, bool isOnlyRotation, bool isBackward, bool nullInitSpeed, bool nullFinalSpeed):
+MoveAction::MoveAction(VectorOriented destination, bool isOnlyRotation, bool isBackward, bool nullInitSpeed, bool nullFinalSpeed, unsigned int mstimeout):
     destination(destination),
     isOnlyRotation(isOnlyRotation),
     isBackward(isBackward),
@@ -8,7 +8,8 @@ MoveAction::MoveAction(VectorOriented destination, bool isOnlyRotation, bool isB
     nullFinalSpeed(nullFinalSpeed)
 {
     id = MOVE;
-    hasStarted = false;
+    msduration = mstimeout;
+    msstart = 0;
     movementDone = false;
 }
 
@@ -21,12 +22,12 @@ bool MoveAction::checkClearPath(float distance, float angle) {
 }
 
 void MoveAction::run(float dt, Robot* robot) {
-    if (!hasStarted) {
+    if (!msstart) {
+        msstart = millis();
         robot->startMovement(destination, isOnlyRotation, isBackward, nullInitSpeed, nullFinalSpeed);
-        hasStarted = true;
     }
     robot->updateMovement();
-    if (robot->movementDone()) {
+    if (robot->movementDone() || (!msduration && (millis() - msstart) > msduration)) {
         movementDone = true;
     }
 }
@@ -36,7 +37,7 @@ bool MoveAction::isDone() {
 }
 
 void MoveAction::reset() {
-    hasStarted = false;
+    msstart = 0;
     movementDone = false;
 }
 
@@ -152,10 +153,9 @@ void StaticAction::reset() {
 }
 
 
-DelayAction::DelayAction(unsigned long msduration):
-    msduration(msduration)
-{
+DelayAction::DelayAction(unsigned long msduration){
     msstart = 0;
+    this->msduration = msduration;
     id = DELAY;
 }
 
