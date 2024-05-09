@@ -220,14 +220,76 @@ void setup() {
         }
     );
     */
-    brain = new SequenceManager({test_spin, test_spin, test_spin, test_spin, test_spin});
+    //robot = new Robot(0.0f, 0.0f, 0.0f);
+    Sequence Test_premier_triangle(
+        {
+            new MoveAction(VectorOriented(1.0f, 0.85f, 0.7045f), false, false, true, true),
+            new StaticAction(CLOSE_CLAWS),
+            new StaticAction(RAISE_CLAWS,true),
+            new MoveAction(VectorOriented(0.45f, 0.6125f, 0.0), false, true, true, true),
+            new StaticAction(START_MAGNET,true),
+            new MoveAction(VectorOriented(0.065f, 0.6125f, 0.0), true, false, true, true),
+            new MoveAction(VectorOriented(0.1f, 0.6125f, 0.0), false, false, true, true),
+            new MoveAction(VectorOriented(0.1f, 0.6125f, PI/2), false, true, true, true),
+            new MoveAction(VectorOriented(0.1f, 0.065f, PI/2), true, false, true, true),
+            new StaticAction(SHUTDOWN_MAGNET,true),
+            new MoveAction(VectorOriented(0.1f, 0.1f, PI/2), false, false, true, true),
+            new MoveAction(VectorOriented(0.1f, 0.1f, -PI/2), false, true, true, true),
+            new MoveAction(VectorOriented(0.1f, 0.065f, -PI/2), false, false, true, true),
+            new StaticAction(OPEN_CLAWS),
+            new MoveAction(VectorOriented(0.1f, 0.1f, -PI/2), true, false, true, true),
+            new StaticAction(LOWER_CLAWS)
+        }
+    );
+    Sequence Rush(
+        {
+            new MoveAction(VectorOriented(1.5f, 0.0f, 0.0f), false, false, true, true)
+        }
+    );
+    //robot = new Robot(0.0f, 2.0f, 0.0f);
+    Sequence Moins_Rush_Bleu(
+        {
+            new MoveAction(VectorOriented(1.0f, 2-0.85f, -0.7045f), false, false, true, true),
+            new StaticAction(CLOSE_CLAWS),
+            new MoveAction(VectorOriented(1.0f, 2-0.85f, -PI/2), true, false, true, true),
+            new MoveAction(VectorOriented(0.8f, 2-1.95f, 0.0f), false, false, true, true),
+            new StaticAction(SOLAR_RIGHT_ON),
+            new MoveAction(VectorOriented(0.0f, 2-1.95f, 0.0f), false, true, true, true),
+            new StaticAction(OPEN_CLAWS,true),
+            new StaticAction(SOLAR_RIGHT_OFF)
+        }
+    );
+    Sequence Moins_Rush_Jaune(
+        {
+            new MoveAction(VectorOriented(1.0f, 0.85f, 0.7045f), false, false, true, true),
+            new StaticAction(CLOSE_CLAWS),
+            new MoveAction(VectorOriented(1.0f, 0.85f, PI/2), true, false, true, true),
+            new MoveAction(VectorOriented(0.8f, 1.95f, PI), false, false, true, true),
+            new StaticAction(SOLAR_RIGHT_ON),
+            new MoveAction(VectorOriented(0.0f, 1.95f, PI), false, false, true, true),
+            new StaticAction(OPEN_CLAWS,true),
+            new StaticAction(SOLAR_RIGHT_OFF)
+        }
+    );
+    Sequence Test_Solaires(
+        {
+            new StaticAction(SOLAR_RIGHT_ON,true),
+            new MoveAction(VectorOriented(1.0f, 0.0f, 0.0f), false, false, true, true)
+        }
+    );
+    Sequence test(
+        {
+            new MoveAction(VectorOriented(0.5f, 0.0f, 0.0f), false, false, true, true)
+        }
+    );
+    brain = new SequenceManager({test});
 
     /* MISC */
     MoveProfilesSetup::setup();
     threads.setMicroTimer(10);
     threads.setDefaultTimeSlice(1);
 
-    // tirrette_mut.lock();
+    //tirrette_mut.lock();
 
     Logger::setup(&Serial, &Serial, &Serial, false, false, true);
 

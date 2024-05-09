@@ -17,7 +17,7 @@ Robot::Robot(float x_ini, float y_ini, float theta_ini) {
     this->switchL = Switch(PIN_SWITCH_L);
     this->switchR = Switch(PIN_SWITCH_R);
 
-    this->odometry = Odometry(&codeuseL, &codeuseR, 0.294, &switchL, &switchR, &kineticCurrent);
+    this->odometry = Odometry(&codeuseL, &codeuseR, 0.2979, &switchL, &switchR, &kineticCurrent);
 
     this->controller = Asservissement(&translationOrder, &rotationOrder, &kineticCurrent, &kineticNext, 100.0);
 
@@ -54,10 +54,10 @@ bool Robot::movementDone() {
         ghost.goToRobot(kineticCurrent);
 
         // Mettre les moteurs à 0 en fin de mouvement
-        // motorL.setPWMValue(0.0f);
-        // motorR.setPWMValue(0.0f);
-        // motorL.actuate();
-        // motorR.actuate();
+        motorL.setPWMValue(0.0f);   //TODO enchaine mouvement v non nulle
+        motorR.setPWMValue(0.0f);
+        motorL.actuate();
+        motorR.actuate();
     } else if ((millis() - startActionMillis) > 10000) {
         Logger::info("Mouvement failed et arrete");
         out = true;
