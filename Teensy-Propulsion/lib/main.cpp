@@ -174,163 +174,92 @@ void setup() {
     }
 
     /* SEQUENCES */
-    //  Sequences d'Attente  //
-    Sequence Attendre(
-        {
-            new DelayAction(1000)
-        }
-    );
-    // Sequences de pinces  //
-    Sequence Prendre_Pots(
-        {
-            new StaticAction(CLOSE_CLAWS),
-            new StaticAction(RAISE_CLAWS,true)
-        }
-    );
-    Sequence Poser_Pots(
-        {
-            new StaticAction(LOWER_CLAWS),
-            new StaticAction(OPEN_CLAWS)
-        }
-    );
-    Sequence Lacher_Pots(
-        {
-            new StaticAction(OPEN_CLAWS)
-        }
-    );
-    Sequence Descendre_Pince(
-        {
-            new StaticAction(LOWER_CLAWS)
-        }
-    );
 
-    //  Sequences de déplacement  //
-    Sequence Retour_Base(
-        {
-            new MoveAction(VectorOriented(0.0f, 0.0f, PI), false, false, true, true)
-        }
-    );
-    Sequence Sortie_Base(
-        {
-            new MoveAction(VectorOriented(0.8f, 0.0f, 0.0f), false, false, true, true)
-        }
-    );
-    Sequence arriere(
-        {
-            new MoveAction(VectorOriented(0.f, 0.0f, 0.0f), false, true, true, true),
-        }
-    );
-    Sequence test_aller_retour(
-        {
-            new MoveAction(VectorOriented(1.0f, 0.0f, 0.0f), false, false, true, true),
-            new MoveAction(VectorOriented(0.0f, 0.0f, 0.0f), false, true, true, true),
-        }
-    );
-    Sequence test_spin(
-        {
-            new MoveAction(VectorOriented(0.0f, 0.0f, PI), true, false, true, true),
-            new MoveAction(VectorOriented(0.0f, 0.0f, 0.0f), true, false, true, true),
-        }
-    );
-    /* 
     Sequence Brain_Bleu(
         {
-            new MoveAction(VectorOriented(0.45f, 0.45f, 0.0f), false, false, true, true),
-            new MoveAction(VectorOriented(0.0f, 0.0f, 0.0f), false, true, true, true),
-        }
-    );
-    */
-    /* 
-    Sequence Brain_Jaune(
-        {
-            new MoveAction(VectorOriented(1.0f, 0.0f, 0.0f), false, false, true, true),
-            new MoveAction(VectorOriented(0.0f, 0.0f, 0.0f), false, true, true, true),
-        }
-    );
-    */
-    //robot = new Robot(0.0f, 0.0f, 0.0f);
-    Sequence Test_premier_triangle(
-        {
-            new MoveAction(VectorOriented(1.0f, 0.85f, 0.7045f), false, false, true, true),
+            new StaticAction(SOLAR_RIGHT_ON),
+            new MoveAction(VectorOriented(0.635f, 0.0f, 0.0f), false, false, true, true),
+            new StaticAction(SOLAR_RIGHT_OFF),
+            new MoveAction(VectorOriented(0.635f, 0.0f, PI), true, false, true, true),
+            new StaticAction(START_MAGNET,true),
+            new MoveAction(VectorOriented(0.650, 0.0f, PI), false, true, true, true),
+            new MoveAction(VectorOriented(0.650, 0.0f, PI/2), true, false, true, true),
+            new MoveAction(VectorOriented(0.650, 0.835, PI/2), false, false, true, true),
             new StaticAction(CLOSE_CLAWS),
             new StaticAction(RAISE_CLAWS,true),
-            new MoveAction(VectorOriented(0.45f, 0.6125f, 0.0), false, true, true, true),
-            new StaticAction(START_MAGNET,true),
-            new MoveAction(VectorOriented(0.065f, 0.6125f, 0.0), true, false, true, true),
-            new MoveAction(VectorOriented(0.1f, 0.6125f, 0.0), false, false, true, true),
-            new MoveAction(VectorOriented(0.1f, 0.6125f, PI/2), false, true, true, true),
-            new MoveAction(VectorOriented(0.1f, 0.065f, PI/2), true, false, true, true),
+            new MoveAction(VectorOriented(0.0f, 0.0f, 0.0), false, true, true, true),
             new StaticAction(SHUTDOWN_MAGNET,true),
-            new MoveAction(VectorOriented(0.1f, 0.1f, PI/2), false, false, true, true),
-            new MoveAction(VectorOriented(0.1f, 0.1f, -PI/2), false, true, true, true),
-            new MoveAction(VectorOriented(0.1f, 0.065f, -PI/2), false, false, true, true),
+            new MoveAction(VectorOriented(0.15, 0.0f, 0.0), false, false, true, true),
+            new MoveAction(VectorOriented(0.15, 0.0f, PI), true, false, true, true),
+            new MoveAction(VectorOriented(0.15, 0.0f, PI), false, false, true, true),
             new StaticAction(OPEN_CLAWS),
-            new MoveAction(VectorOriented(0.1f, 0.1f, -PI/2), true, false, true, true),
+            new MoveAction(VectorOriented(0.15, 0.0f, 0.0), false, true, true, true),
             new StaticAction(LOWER_CLAWS)
         }
     );
-    Sequence Rush(
+    Sequence Brain_Jaune(
         {
-            new MoveAction(VectorOriented(1.5f, 0.0f, 0.0f), false, false, true, true)
-        }
-    );
-    //robot = new Robot(0.0f, 2.0f, 0.0f);
-    Sequence Moins_Rush_Bleu(
-        {
-            new MoveAction(VectorOriented(0.5f, 1.5-0.4f, -0.7045f), false, false, true, true),
+            new StaticAction(SOLAR_LEFT_ON),
+            new MoveAction(VectorOriented(0.70f, 1.77, 0.0f), false, false, true, true),
+            new MoveAction(VectorOriented(0.70f, 1.77, -0.9*PI/4), true, false, true, true),
+            new StaticAction(SOLAR_LEFT_OFF,true),
+            new MoveAction(VectorOriented(1.0f, 1.4f, -PI/2), false, false, true, true),
+            new MoveAction(VectorOriented(0.85f, 1.2f, -3*PI/4), false, false, true, true),
             new StaticAction(CLOSE_CLAWS),
-            new MoveAction(VectorOriented(0.5f, 1.5-0.4f, -PI/2), true, false, true, true),
-            new MoveAction(VectorOriented(0.5f, 0.05, 0.0f), false, false, true, true),
-            new StaticAction(SOLAR_RIGHT_ON),
-            new MoveAction(VectorOriented(0.0f, 0.05, 0.0f), false, true, true, true),
-            new StaticAction(OPEN_CLAWS,true),
-            new StaticAction(SOLAR_RIGHT_OFF)
-        }
-    );
-    Sequence Moins_Rush_Jaune(
-        {
-            new MoveAction(VectorOriented(0.5f, 0.40f, 0.7045f), false, false, true, true),
-            new StaticAction(CLOSE_CLAWS),
-            new MoveAction(VectorOriented(0.5f, 0.40f, PI/2), true, false, true, true),
-            new MoveAction(VectorOriented(0.5f, 1.45f, PI), false, false, true, true),
-            new StaticAction(SOLAR_RIGHT_ON),
-            new MoveAction(VectorOriented(0.0f, 1.45f, PI), false, false, true, true),
-            new StaticAction(OPEN_CLAWS,true),
-            new StaticAction(SOLAR_RIGHT_OFF)
-        }
-    );
-    Sequence Test_Solaires(
-        {
-            new StaticAction(SOLAR_RIGHT_ON,true),
-            new MoveAction(VectorOriented(1.0f, 0.0f, 0.0f), false, false, true, true)
-        }
-    );
-    Sequence Carre(
-        {
-            new MoveAction(VectorOriented(0.6f, 0.0f, 0.0f), false, false, true, true),
-            new MoveAction(VectorOriented(0.6f, 0.0f, -PI/2), true, false, true, true),
-            new MoveAction(VectorOriented(0.6f, -0.6f, -PI/2), false, false, true, true),
-            new MoveAction(VectorOriented(0.6f, -0.6f, PI), true, false, true, true),
-            new MoveAction(VectorOriented(0.0f, -0.6f, PI), false, false, true, true),
-            new MoveAction(VectorOriented(0.0f, -0.6f, PI/2), true, false, true, true),
-            new MoveAction(VectorOriented(0.0f, 0.0f, PI/2), false, false, true, true),
-            new MoveAction(VectorOriented(0.0f, 0.0f, 0.0f), true, false, true, true)
-        }
-    );
-    Sequence bras(
-        {
+            new MoveAction(VectorOriented(0.94f, 1.69f, -PI/2), false, true, true, true),
             new StaticAction(START_MAGNET,true),
-            new StaticAction(SOLAR_RIGHT_ON,true),
+            new MoveAction(VectorOriented(0.94f, 1.71f, -PI/2), false, true, true, true),
+
+            new MoveAction(VectorOriented(0.94f, 1.35f, -PI/2), false, false, true, true),
+
+            new MoveAction(VectorOriented(1.11f, 1.73f, -PI/2), false, true, true, true),
+            new MoveAction(VectorOriented(1.11f, 1.765f, -PI/2), false, true, true, true),
+            new MoveAction(VectorOriented(1.23f, 1.47f, -PI/4), false, false, true, true),
+            new MoveAction(VectorOriented(0.26f, 1.77f, 0.0f), false, true, true, true),
+            new StaticAction(SHUTDOWN_MAGNET,true),
+            new StaticAction(RAISE_CLAWS,true),
+            new MoveAction(VectorOriented(0.45f, 1.75f, -PI/8), false, false, true, true),
+            new MoveAction(VectorOriented(0.45f, 1.75f, PI), true, false, true, true),
+            new MoveAction(VectorOriented(0.22f, 1.77f, PI), false, false, true, true),
+            new StaticAction(OPEN_CLAWS)
+
+            /*
+            new StaticAction(SOLAR_LEFT_OFF),
+            new MoveAction(VectorOriented(0.625f, 0.0f, -PI/2), true, false, true, true),
+            new MoveAction(VectorOriented(0.625f, 0.2f, -PI/2), false, false, true, true),
+
+            new MoveAction(VectorOriented(0.625f, 0.2f, -3*PI/4), true, false, true, true),
+
+            new StaticAction(START_MAGNET,true),
+            new MoveAction(VectorOriented(0.650, 0.0f, PI), false, true, true, true),
+            new MoveAction(VectorOriented(0.650, 0.0f, -PI/2), true, false, true, true),
+            new MoveAction(VectorOriented(0.650, -0.835, -PI/2), false, false, true, true),
+            new StaticAction(CLOSE_CLAWS),
+            new StaticAction(RAISE_CLAWS,true),
+            new MoveAction(VectorOriented(0.0f, 0.0f, 0.0), false, true, true, true),
+            new StaticAction(SHUTDOWN_MAGNET,true),
+            new MoveAction(VectorOriented(0.15, 0.0f, 0.0), false, false, true, true),
+            new MoveAction(VectorOriented(0.15, 0.0f, PI), true, false, true, true),
+            new MoveAction(VectorOriented(0.15, 0.0f, PI), false, false, true, true),
+            new StaticAction(OPEN_CLAWS),
+            new MoveAction(VectorOriented(0.15, 0.0f, 0.0), false, true, true, true),
+            new StaticAction(LOWER_CLAWS)
+            */
+
+        }
+    );
+        Sequence Brain_Test(
+        {
+            new StaticAction(SOLAR_LEFT_OFF),
+            new StaticAction(SOLAR_RIGHT_OFF),
             new StaticAction(SOLAR_LEFT_ON),
             new DelayAction(3000),
-            new StaticAction(SOLAR_RIGHT_OFF,true),
-            new StaticAction(SOLAR_LEFT_OFF,true),
-            new StaticAction(SHUTDOWN_MAGNET)
+            new StaticAction(SOLAR_LEFT_OFF)
         }
     );
-    robot = new Robot(0.0f, 1.5f, 0.0f);
-    brain_bleu = new SequenceManager({bras}); 
-    brain_jaune = new SequenceManager({bras});
+    robot = new Robot(0.14f, 1.77f, 0.0f);
+    brain_bleu = new SequenceManager({Brain_Jaune}); 
+    brain_jaune = new SequenceManager({Brain_Jaune});
     // Default team color is blue
     brain = brain_bleu;
     robot->comESP.send(newMessageActuator(Teensy, ESP_32, SetTeamColorBleu));
@@ -340,7 +269,7 @@ void setup() {
     threads.setMicroTimer(10);
     threads.setDefaultTimeSlice(1);
 
-    tirrette_mut.lock();
+    //tirrette_mut.lock();
 
     Logger::setup(&Serial, &Serial, &Serial, false, false, true);
 
