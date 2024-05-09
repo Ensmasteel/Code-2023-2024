@@ -39,6 +39,7 @@ void setup() {
     IsSolarLeft = false;
     IsSolarRight = false;
     SolarRight.write(10);
+    SolarLeft.write(120);
 
     elevator.setSpeed(3000);
     elevator.step(3500);
@@ -88,13 +89,13 @@ void loop() {
                 break;
             case SolarLeftOn:
                 if (msg.did == Todo && !IsSolarRight) {
-                    //SolarLeft.write(90);
+                    SolarLeft.write(30);
                     IsSolarLeft = true;
                 }
                 break;
             case SolarLeftOff:
                 if (msg.did == Todo) {
-                    //SolarLeft.write(0);
+                    SolarLeft.write(120);
                     IsSolarLeft = false;
                 }  
                 break;
