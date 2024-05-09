@@ -9,7 +9,7 @@
 #define PIN_ELEVATOR_M1 39
 #define PIN_ELEVATOR_M2 41
 
-#define PIN_MAGNET 8
+#define PIN_MAGNET 12
 
 #define PIN_SOLARLEFT 6
 #define PIN_SOLARRIGHT 4
