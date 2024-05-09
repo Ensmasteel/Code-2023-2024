@@ -28,8 +28,6 @@ class Action {
 
     protected:
         actionType id;
-        unsigned long msstart;
-        unsigned long msduration;
 };
 
 class MoveAction : public Action {
@@ -44,10 +42,11 @@ class MoveAction : public Action {
         VectorOriented destination;
         bool isOnlyRotation;
         bool isBackward;
-        bool movementDone;
         bool nullInitSpeed;
         bool nullFinalSpeed;
+        unsigned int msstart;
         unsigned int mstimeout;
+        bool movementDone;
 };
 
 class StaticAction : public Action {
@@ -60,6 +59,8 @@ class StaticAction : public Action {
 
     private:
         bool noDuration;
+        unsigned long msstart;
+        unsigned long msduration;
 };
 
 class DelayAction : public Action {
@@ -69,6 +70,10 @@ class DelayAction : public Action {
         void run(float dt, Robot* robot) override;
         bool isDone() override;
         void reset() override;
+
+    private:
+        unsigned long msstart;
+        unsigned long msduration;
 };
 
 

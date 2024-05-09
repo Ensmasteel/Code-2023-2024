@@ -5,10 +5,10 @@ MoveAction::MoveAction(VectorOriented destination, bool isOnlyRotation, bool isB
     isOnlyRotation(isOnlyRotation),
     isBackward(isBackward),
     nullInitSpeed(nullInitSpeed),
-    nullFinalSpeed(nullFinalSpeed)
+    nullFinalSpeed(nullFinalSpeed),
+    mstimeout(mstimeout)
 {
     id = MOVE;
-    msduration = mstimeout;
     msstart = 0;
     movementDone = false;
 }
@@ -27,7 +27,7 @@ void MoveAction::run(float dt, Robot* robot) {
         robot->startMovement(destination, isOnlyRotation, isBackward, nullInitSpeed, nullFinalSpeed);
     }
     robot->updateMovement();
-    if (robot->movementDone() || (!msduration && (millis() - msstart) > msduration)) {
+    if (robot->movementDone() || (!mstimeout && (millis() - msstart) > mstimeout)) {
         movementDone = true;
     }
 }
@@ -153,9 +153,10 @@ void StaticAction::reset() {
 }
 
 
-DelayAction::DelayAction(unsigned long msduration){
+DelayAction::DelayAction(unsigned long msduration):
+    msduration(msduration)
+{
     msstart = 0;
-    this->msduration = msduration;
     id = DELAY;
 }
 
