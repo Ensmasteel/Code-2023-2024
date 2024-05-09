@@ -27,7 +27,7 @@ void MoveAction::run(float dt, Robot* robot) {
         robot->startMovement(destination, isOnlyRotation, isBackward, nullInitSpeed, nullFinalSpeed);
     }
     robot->updateMovement();
-    if (robot->movementDone() || (!msduration && (millis() - msstart) > msduration)) {
+    if (robot->movementDone() || (msduration && (millis() - msstart) > msduration)) {
         movementDone = true;
     }
 }
