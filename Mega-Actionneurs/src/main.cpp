@@ -71,13 +71,13 @@ void loop() {
                 break;
             case RaiseClaws:
                 if (msg.did == Todo && !elevator_raised) {
-                    elevator.step(2000);
+                    elevator.step(2200);
                     elevator_raised = true;
                 }
                 break;
             case LowerClaws:
                 if (msg.did == Todo && elevator_raised) {
-                    elevator.step(-2000);
+                    elevator.step(-2200);
                     elevator_raised = false;
                 }
                 break;
