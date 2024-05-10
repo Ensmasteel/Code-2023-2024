@@ -206,26 +206,27 @@ void setup() {
             new MoveAction(VectorOriented(3.0f - 0.42f,  1.72f, normalizeAngle(PI -  PI)), false, true, true, true),
             new StaticAction(LOWER_CLAWS,true),
             new MoveAction(VectorOriented(3.0f - 0.42f,  1.72f, normalizeAngle(PI -  -3*PI/8)), true, false, true, true),
-            new MoveAction(VectorOriented(3.0f - 0.90f,  0.83f, normalizeAngle(PI -  -3*PI/8)), false, false, true, true),
+            new MoveAction(VectorOriented(3.0f - 0.85f,  0.78f, normalizeAngle(PI -  -3*PI/8)), false, false, true, true),
             new MoveAction(VectorOriented(3.0f - 1.12f,  0.75f, normalizeAngle(PI -  0.0f)), false, false, true, true),
             new StaticAction(CLOSE_CLAWS),
-            //  La suite des valeurs en X est affectée de -4 cm
-            new MoveAction(VectorOriented(3.0f - 0.32f,  0.67f, normalizeAngle(PI -  0.0f)), false, true, true, true),
+            new MoveAction(VectorOriented(3.0f - 0.35f,  0.67f, normalizeAngle(PI -  0.0f)), false, true, true, true),
             new StaticAction(START_MAGNET,true),
-            new MoveAction(VectorOriented(3.0f - 0.29f,  0.67f, normalizeAngle(PI -  0.0f)), false, true, true, true),
-            new MoveAction(VectorOriented(3.0f - 0.62f,  0.5f, normalizeAngle(PI -  0.0f)), false, false, true, true),
-            new MoveAction(VectorOriented(3.0f - 0.32f,  0.5f, normalizeAngle(PI -  0.0f)), false, true, true, true),
-            new MoveAction(VectorOriented(3.0f - 0.29f,  0.5f, normalizeAngle(PI -  0.0f)), false, true, true, true, 1000),
-            new MoveAction(VectorOriented(3.0f - 0.33f,  0.5f, normalizeAngle(PI -  0.0f)), false, false, true, true),
-            new MoveAction(VectorOriented(3.0f - 0.33f,  0.5f, normalizeAngle(PI -  PI/2)), true, false, true, true),
-            new MoveAction(VectorOriented(3.0f - 0.33f,  0.23f, normalizeAngle(PI -  PI/2)), false, true, true, true),
+            new MoveAction(VectorOriented(3.0f - 0.32f,  0.67f, normalizeAngle(PI -  0.0f)), false, true, true, true),
+            new MoveAction(VectorOriented(3.0f - 0.69f,  0.49f, normalizeAngle(PI -  0.0f)), false, false, true, true),
+
+            new MoveAction(VectorOriented(3.0f - 0.28f,  0.49f, normalizeAngle(PI -  0.0f)), false, true, true, true),
+            new MoveAction(VectorOriented(3.0f - 0.25f,  0.49f, normalizeAngle(PI -  0.0f)), false, true, true, true, 1000),
+            new MoveAction(VectorOriented(3.0f - 0.40f,  0.49f, normalizeAngle(PI -  0.0f)), false, false, true, true),
+            new MoveAction(VectorOriented(3.0f - 0.40f,  0.49f, normalizeAngle(PI -  PI/2)), true, false, true, true),
+            new MoveAction(VectorOriented(3.0f - 0.40f,  0.23f, normalizeAngle(PI -  PI/2)), false, true, true, true),
             new StaticAction(SHUTDOWN_MAGNET,true),
             new StaticAction(RAISE_CLAWS,true),
-            new MoveAction(VectorOriented(3.0f - 0.33f,  0.36f, normalizeAngle(PI -  PI/2)), false, false, true, true),
-            new MoveAction(VectorOriented(3.0f - 0.33f,  0.36f, normalizeAngle(PI -  -PI/2)), true, false, true, true),
-            new MoveAction(VectorOriented(3.0f - 0.33f,  0.22f, normalizeAngle(PI -  -PI/2)), false, false, true, true),
+            new MoveAction(VectorOriented(3.0f - 0.40f,  0.36f, normalizeAngle(PI -  PI/2)), false, false, true, true),
+            new MoveAction(VectorOriented(3.0f - 0.40f,  0.36f, normalizeAngle(PI -  -PI/2)), true, false, true, true),
+            new MoveAction(VectorOriented(3.0f - 0.40f,  0.19f, normalizeAngle(PI -  -PI/2)), false, false, true, true),
             new StaticAction(OPEN_CLAWS),
-            new MoveAction(VectorOriented(3.0f - 0.37f,  0.30f, normalizeAngle(PI -  -PI/2)), false, true, true, true)
+            new MoveAction(VectorOriented(3.0f - 0.40f,  0.36f, normalizeAngle(PI -  -PI/2)), false, true, true, true),
+            new StaticAction(LOWER_CLAWS)
         }
     );
     Sequence Brain_Jaune(
@@ -242,7 +243,7 @@ void setup() {
             new MoveAction(VectorOriented(0.94f, 1.71f, -PI/2), false, true, true, true),
             new MoveAction(VectorOriented(0.94f, 1.35f, -PI/2), false, false, true, true),
             new MoveAction(VectorOriented(1.11f, 1.73f, -PI/2), false, true, true, true),
-            new MoveAction(VectorOriented(1.11f, 1.77f, -PI/2), false, true, true, true, 1000),
+            new MoveAction(VectorOriented(1.11f, 1.77f, -PI/2), false, true, true, true, 500),
             new MoveAction(VectorOriented(1.18f, 1.47f, -PI/4), false, false, true, true),
             new MoveAction(VectorOriented(0.26f, 1.72f, 0.0f), false, true, true, true),
             new StaticAction(SHUTDOWN_MAGNET,true),
@@ -257,31 +258,32 @@ void setup() {
             new MoveAction(VectorOriented(0.90f, 0.78f, -3*PI/8), false, false, true, true),
             new MoveAction(VectorOriented(1.12f, 0.70f, 0.0f), false, false, true, true),
             new StaticAction(CLOSE_CLAWS),
-            //  La suite des valeurs en X est affectée de -4 cm
             new MoveAction(VectorOriented(0.24f, 0.68f, 0.0f), false, true, true, true),
             new StaticAction(START_MAGNET,true),
             new MoveAction(VectorOriented(0.21f, 0.68f, 0.0f), false, true, true, true),  
-            new MoveAction(VectorOriented(0.54f, 0.5f, 0.0f), false, false, true, true),
-            new MoveAction(VectorOriented(0.16f, 0.5f, 0.0f), false, true, true, true),
-            new MoveAction(VectorOriented(0.14f, 0.5f, 0.0f), false, true, true, true, 1000),
-            new MoveAction(VectorOriented(0.21f, 0.5f, 0.0f), false, false, true, true),
-            new MoveAction(VectorOriented(0.21f, 0.5f, PI/2), true, false, true, true),
+            new MoveAction(VectorOriented(0.54f, 0.49f, 0.0f), false, false, true, true),
+            new MoveAction(VectorOriented(0.16f, 0.49f, 0.0f), false, true, true, true),
+            new MoveAction(VectorOriented(0.13f, 0.49f, 0.0f), false, true, true, true, 1000),
+            new MoveAction(VectorOriented(0.21f, 0.49f, 0.0f), false, false, true, true),
+            new MoveAction(VectorOriented(0.21f, 0.49f, PI/2), true, false, true, true),
             new MoveAction(VectorOriented(0.21f, 0.23f, PI/2), false, true, true, true),
             new StaticAction(SHUTDOWN_MAGNET,true),
             new StaticAction(RAISE_CLAWS,true),
             new MoveAction(VectorOriented(0.21f, 0.36f, PI/2), false, false, true, true),
             new MoveAction(VectorOriented(0.21f, 0.36f, -PI/2), true, false, true, true),
-            new MoveAction(VectorOriented(0.21f, 0.22f, -PI/2), false, false, true, true),
+            new MoveAction(VectorOriented(0.21f, 0.20f, -PI/2), false, false, true, true),
             new StaticAction(OPEN_CLAWS),
-            new MoveAction(VectorOriented(0.21f, 0.30f, -PI/2), false, true, true, true)
+            new MoveAction(VectorOriented(0.21f, 0.36f, -PI/2), false, true, true, true),
+            new StaticAction(LOWER_CLAWS)
         }
     );
 
     brain_bleu = new SequenceManager({Brain_Bleu}); 
     brain_jaune = new SequenceManager({Brain_Jaune});
     // Default team color is blue
-    robot = new Robot(robotInitBleu.getX(), robotInitBleu.getY(), robotInitBleu.getTheta());
-    brain = brain_bleu;
+    //robot = new Robot(robotInitBleu.getX(), robotInitBleu.getY(), robotInitBleu.getTheta());
+    robot = new Robot(robotInitJaune.getX(), robotInitJaune.getY(), robotInitJaune.getTheta());
+    brain = brain_jaune;
     robot->comESP.send(newMessageActuator(Teensy, ESP_32, SetTeamColorBleu));
 
     /* MISC */
@@ -289,7 +291,7 @@ void setup() {
     threads.setMicroTimer(10);
     threads.setDefaultTimeSlice(1);
 
-    tirrette_mut.lock();
+    //tirrette_mut.lock();
 
     Logger::setup(&Serial, &Serial, &Serial, false, false, true);
 
