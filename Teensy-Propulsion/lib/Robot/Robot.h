@@ -14,6 +14,7 @@ class Robot {
    public:
         Robot(float x_ini, float y_ini, float theta_ini);
         Robot(){};
+        void init(float x_ini, float y_ini, float theta_ini);
 
         Ghost& getGhost();
 

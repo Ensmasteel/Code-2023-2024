@@ -28,6 +28,12 @@ Robot::Robot(float x_ini, float y_ini, float theta_ini) {
 
 }
 
+void Robot::init(float x_ini, float y_ini, float theta_ini) {
+    this->vectIni = VectorOriented(x_ini, y_ini, theta_ini);
+    this->kineticCurrent = Kinetic(x_ini, y_ini, theta_ini, 0, 0);
+    this->kineticNext = Kinetic(x_ini, y_ini, theta_ini, 0, 0);
+}
+
 Ghost& Robot::getGhost() {
     return ghost;
 }

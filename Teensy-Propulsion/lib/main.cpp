@@ -12,6 +12,8 @@
 #define MS_WAIT_ON_ENEMY 300
 
 Robot* robot;
+VectorOriented robotInitBleu(3.0f - 0.14f, 1.77f, PI);
+VectorOriented robotInitJaune(0.14f, 1.77f, 0.0f);
 SequenceManager* brain;
 SequenceManager* brain_bleu;
 SequenceManager* brain_jaune;
@@ -111,10 +113,12 @@ void threadTirette() {
                     switch (msg.aid){
                     case SetTeamColorJaune:
                         brain = brain_jaune;
+                        robot->init(robotInitJaune.getX(), robotInitJaune.getY(), robotInitJaune.getTheta());
                         robot->comESP.send(newMessageActuator(Teensy, ESP_32, SetTeamColorJaune));
                         break;
                     case SetTeamColorBleu:
                         brain = brain_bleu;
+                        robot->init(robotInitBleu.getX(), robotInitBleu.getY(), robotInitBleu.getTheta());
                         robot->comESP.send(newMessageActuator(Teensy, ESP_32, SetTeamColorBleu));
                         break;
                     default:
@@ -142,11 +146,11 @@ void threadEnd() {
                 first = false;
             } else {
                 actMillis = millis() - startMillis;
-                if ((actMillis >= 90000 && actMillis < 99000)) {
-                    threads.suspend(2);
-                    brain->forceRetourBase();
-                    threads.delay(1000 * dt);
-                }
+                // if ((actMillis >= 90000 && actMillis < 99000)) {
+                //     threads.suspend(2);
+                //     brain->forceRetourBase();
+                //     threads.delay(1000 * dt);
+                // }
                 if (actMillis >= 99000) {
                     robot->stopMovement();
                     threads.suspend(2);  // STOP ACTION + EVITEMENT SEULEMENT ATTENTION A L'ORDRE DES ADD THREADS
@@ -176,7 +180,6 @@ void setup() {
     }
 
     /* SEQUENCES */
-    //
     Sequence Brain_Bleu(
         {
             new StaticAction(SOLAR_RIGHT_ON),
@@ -273,13 +276,11 @@ void setup() {
             new MoveAction(VectorOriented(0.21f, 0.30f, -PI/2), false, true, true, true)
         }
     );
-    //robot = new Robot(0.0f, 0.0f, 0.0f);
-    robot = new Robot(3.0f - 0.14f, 1.77f, PI); //mode Bleu
-    //robot = new Robot(0.14f, 1.77f, 0.0f); //mode Jaune
-    
+
     brain_bleu = new SequenceManager({Brain_Bleu}); 
     brain_jaune = new SequenceManager({Brain_Jaune});
     // Default team color is blue
+    robot = new Robot(robotInitBleu.getX(), robotInitBleu.getY(), robotInitBleu.getTheta());
     brain = brain_bleu;
     robot->comESP.send(newMessageActuator(Teensy, ESP_32, SetTeamColorBleu));
 
@@ -288,7 +289,7 @@ void setup() {
     threads.setMicroTimer(10);
     threads.setDefaultTimeSlice(1);
 
-    //tirrette_mut.lock();
+    tirrette_mut.lock();
 
     Logger::setup(&Serial, &Serial, &Serial, false, false, true);
 
