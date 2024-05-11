@@ -32,7 +32,7 @@ void setup() {
     Logger::setup(&Serial, &Serial, &Serial, false, false, false);
 
     rato.attach(PIN_CLAWS);
-    rato.write(75);
+    rato.write(180);
 
     SolarLeft.attach(PIN_SOLARLEFT);
     SolarRight.attach(PIN_SOLARRIGHT);
@@ -64,10 +64,10 @@ void loop() {
 
         switch(msg.aid) {
             case OpenClaws:
-                if (msg.did == Todo) rato.write(75);
+                if (msg.did == Todo) rato.write(180);
                 break;
             case CloseClaws:
-                if (msg.did == Todo) rato.write(33);
+                if (msg.did == Todo) rato.write(138);
                 break;
             case RaiseClaws:
                 if (msg.did == Todo && !elevator_raised) {
